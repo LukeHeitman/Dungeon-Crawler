@@ -7,6 +7,8 @@ pygame.init()
 # adds a picture at the specific coords where you want it to appear
 # screen.blit(background, (0, 0))
 
+#TEST
+
 WINDOW_WIDTH = 500
 WINDOW_HEIGHT = 500
 # creates the window/display that the game will be played on
