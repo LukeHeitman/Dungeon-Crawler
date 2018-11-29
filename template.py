@@ -1,18 +1,54 @@
+# Dungeon Crawler
 import pygame, sys
 from pygame.locals import *
 
 pygame.init()
 
-DISPLAY_HEIGHT = 800
-DISPLAY_WIDTH = 600
+#creating game clock
+FPS = 30 
+fpsClock = pygame.time.Clock()
+
+#creating game surface
+DISPLAY_HEIGHT = 500
+DISPLAY_WIDTH = 500
 
 DISPLAYSURF = pygame.display.set_mode((DISPLAY_HEIGHT,DISPLAY_HEIGHT))
-pygame.display.set_caption('Snake')
+pygame.display.set_caption('Dungeon Crawler')
 
+#color constants
+BLACK = (0,0,0)
+WHITE = (255,255,255)
+RED = (255,0,0)
+BLUE = (0,255,0)
+GREEN = (0,0,255)
+
+#create player sprite
+playerimg = pygame.image.load('Assets/player.png')
+playerx = DISPLAY_WIDTH/2
+playery = DISPLAY_HEIGHT/2
+
+#create text box
+fontObj = pygame.font.Font('Assets/dungeon.ttf', 60)
+textSurfaceObj = fontObj.render('~ Dungeon Crawler ~', True, WHITE)
+textRectObj = textSurfaceObj.get_rect()
+textRectObj.center = (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/8)
+
+# main game loop
 while True:
+
+    DISPLAYSURF.fill(BLACK)
+    DISPLAYSURF.blit(playerimg, (playerx,playery))
+    DISPLAYSURF.blit(textSurfaceObj, textRectObj)
+
     for event in pygame.event.get():
         if event.type == QUIT:
-            pygame.quit()
-            sys.exit()
+            game_quit() 
+    
     pygame.display.update()
-#this is a test
+    fpsClock.tick(FPS)
+game_quit()
+
+#game quit function
+def game_quit():
+    pygame.quit()
+    sys.exit()
