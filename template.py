@@ -33,6 +33,8 @@ textSurfaceObj = fontObj.render('~ Dungeon Crawler ~', True, WHITE)
 textRectObj = textSurfaceObj.get_rect()
 textRectObj.center = (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/8)
 
+VELOCITY = 5
+
 # main game loop
 while True:
 
@@ -42,7 +44,18 @@ while True:
 
     for event in pygame.event.get():
         if event.type == QUIT:
-            game_quit() 
+            game_quit() ``
+
+    # handles key pressed events
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_RIGHT]:
+        x+= VELOCITY
+    if keys[pygame.K_LEFT]:
+        x-= VELOCITY
+    if keys[pygame.K_UP]:
+        y-= VELOCITY
+    if keys[pygame.K_DOWN]:
+        y+= VELOCITY
     
     pygame.display.update()
     fpsClock.tick(FPS)
@@ -52,3 +65,5 @@ game_quit()
 def game_quit():
     pygame.quit()
     sys.exit()
+
+#test
