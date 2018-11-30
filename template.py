@@ -89,9 +89,14 @@ while True:
     fpsClock.tick(FPS)
 game_quit()
 
+def player_move():
+
+
+
 #game quit function
 def game_quit():
     pygame.quit()
+<<<<<<< HEAD
     sys.exit()
 
 
@@ -101,3 +106,6 @@ def game_quit():
         
 
 
+=======
+    sys.exit()
+>>>>>>> 11becd83d62df222c8addc39050510bdf9819eaf
