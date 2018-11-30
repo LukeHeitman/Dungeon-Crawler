@@ -65,16 +65,18 @@ def main():
 
     game_Quit()
 
-def read_template():
-    mapTemplate =   [WWWW,
-                     WFFW,
-                     WWWW]
-    for line in mapTemplate:
+
+
+#def read_template():
+    #mapTemplate =   [WWWW,
+                    # WFFW,
+    #                 WWWW]
+   # for line in mapTemplate:
 
 
 
 
-def make_board():
+#def make_board():
     #TODO
 
 def intro_Screen():
