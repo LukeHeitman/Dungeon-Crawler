@@ -37,9 +37,35 @@ textRectObj.center = (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/8)
 
 VELOCITY = 5
 
+def draw_space_pressed():
+    pressKeySurf = fontObj.render('Press space to play!', True, WHITE)
+    pressKeyRect = pressKeySurf.get_rect()
+    pressKeyRect.topleft = (DISPLAY_WIDTH - 200, DISPLAY_HEIGHT - 30)
+    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+def intro_screen():
+
+    introFont = pygame.font.Font('Assets/dungeon.ttf', 60)
+    introText = introFont.render('Dungeon Crawler', True, WHITE, WHITE)
+
+    while True:
+        DISPLAYSURF.fill(BLACK) 
+        # break out of intro screen with the space button
+        draw_space_pressed()
+        introTextRect = introText.get_rect()
+        introTextRect.center = (DISPLAY_WIDTH/2,DISPLAY_HEIGHT/8)
+        DISPLAYSURF.blit(introText, introTextRect)
+        if pygame.K_SPACE:
+            return
+    pygame.display.update()
+    fpsClock.tick(FPS)
+
+
+
 # main game loop
 while True:
 
+    intro_screen()
     DISPLAYSURF.fill(BLACK)
     DISPLAYSURF.blit(playerimg, (playerx,playery))
     DISPLAYSURF.blit(textSurfaceObj, textRectObj)
@@ -68,4 +94,10 @@ def game_quit():
     pygame.quit()
     sys.exit()
 
-#test
+
+
+
+
+        
+
+
