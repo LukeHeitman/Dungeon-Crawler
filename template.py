@@ -22,6 +22,8 @@ RED = (255,0,0)
 BLUE = (0,255,0)
 GREEN = (0,0,255)
 
+# comment
+
 #create player sprite
 playerimg = pygame.image.load('Assets/player.png')
 playerx = DISPLAY_WIDTH/2
