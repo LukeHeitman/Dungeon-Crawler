@@ -96,16 +96,4 @@ def player_move():
 #game quit function
 def game_quit():
     pygame.quit()
-<<<<<<< HEAD
     sys.exit()
-
-
-
-
-
-        
-
-
-=======
-    sys.exit()
->>>>>>> 11becd83d62df222c8addc39050510bdf9819eaf
