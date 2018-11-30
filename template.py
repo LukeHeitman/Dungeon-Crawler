@@ -51,13 +51,13 @@ while True:
     # handles key pressed events
     keys = pygame.key.get_pressed()
     if keys[pygame.K_RIGHT]:
-        x+= VELOCITY
+        playerx+= VELOCITY
     if keys[pygame.K_LEFT]:
-        x-= VELOCITY
+        playerx-= VELOCITY
     if keys[pygame.K_UP]:
-        y-= VELOCITY
+        playery-= VELOCITY
     if keys[pygame.K_DOWN]:
-        y+= VELOCITY
+        playery+= VELOCITY
     
     pygame.display.update()
     fpsClock.tick(FPS)
