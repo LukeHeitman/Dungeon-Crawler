@@ -46,7 +46,11 @@ while True:
 
     for event in pygame.event.get():
         if event.type == QUIT:
+<<<<<<< HEAD
             game_quit() 
+=======
+            game_quit()
+>>>>>>> c69b90501d6abc1ca63a505b3dc54430a3a7c8a5
 
     # handles key pressed events
     keys = pygame.key.get_pressed()
