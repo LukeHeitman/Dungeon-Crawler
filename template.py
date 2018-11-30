@@ -16,8 +16,7 @@ BLACK = (0,0,0)
 WHITE = (255,255,255)
 defaultFont = 'Assets/dungeon.ttf'
 
-#TILE_WIDTH = #TODO Width of game tiles
-#TILE_HEIGHT = #TODO Height of game tiles
+TILE = 16 # Size of game tile
 
 def main():
     global FPSCLOCK, DISPLAYSURFACE, BASICFONT, IMAGEDICT
@@ -66,7 +65,16 @@ def main():
 
     game_Quit()
 
-#def player_move():
+def read_template():
+    mapTemplate =   [WWWW,
+                     WFFW,
+                     WWWW]
+    for line in mapTemplate:
+
+
+
+
+def make_board():
     #TODO
 
 def intro_Screen():
