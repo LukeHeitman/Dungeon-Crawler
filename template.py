@@ -1,107 +1,132 @@
 # Dungeon Crawler
+# By Luke Heitman & Jckson Enright
+# https://github.com/LukeHeitman/Dungeon-Crawler.git
+
 import pygame, sys
 from pygame.locals import *
 
-pygame.init()
+FPS = 30 # Maximum frames per second
+DISPLAY_WIDTH = 500 # width of display window
+DISPLAY_HEIGHT = 500 # height of display window
+HALF_DW = DISPLAY_WIDTH/2
+HALF_DH = DISPLAY_HEIGHT/2
 
-#creating game clock
-FPS = 30 
-fpsClock = pygame.time.Clock()
-
-#creating game surface
-DISPLAY_HEIGHT = 500
-DISPLAY_WIDTH = 500
-
-DISPLAYSURF = pygame.display.set_mode((DISPLAY_HEIGHT,DISPLAY_HEIGHT))
-pygame.display.set_caption('Dungeon Crawler')
-
-#color constants
+ #color constants
 BLACK = (0,0,0)
 WHITE = (255,255,255)
-RED = (255,0,0)
-BLUE = (0,255,0)
-GREEN = (0,0,255)
+defaultFont = 'Assets/dungeon.ttf'
 
-# comment
+TILE = 16 # Size of game tile
 
-#create player sprite
-playerimg = pygame.image.load('Assets/player.png')
-playerx = DISPLAY_WIDTH/2
-playery = DISPLAY_HEIGHT/2
+def main():
+    global FPSCLOCK, DISPLAYSURFACE, BASICFONT, IMAGEDICT
 
-#create text box
-fontObj = pygame.font.Font('Assets/dungeon.ttf', 60)
-textSurfaceObj = fontObj.render('~ Dungeon Crawler ~', True, WHITE)
-textRectObj = textSurfaceObj.get_rect()
-textRectObj.center = (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/8)
+    pygame.init() # Pygame initialization
+    FPSCLOCK = pygame.time.Clock()
 
-VELOCITY = 5
+    # Creation of display surface and font
+    DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT,DISPLAY_HEIGHT))
+    pygame.display.set_caption('Dungeon Crawler')
+    BASICFONT = pygame.font.Font(defaultFont, 20)
 
-def draw_space_pressed():
-    pressKeySurf = fontObj.render('Press space to play!', True, WHITE)
-    pressKeyRect = pressKeySurf.get_rect()
-    pressKeyRect.topleft = (DISPLAY_WIDTH - 200, DISPLAY_HEIGHT - 30)
-    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+    # Create gloabl dictionary of all loaded images
+    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png')}
 
-def intro_screen():
+    intro_Screen() # Begin game with intro screen
 
-    introFont = pygame.font.Font('Assets/dungeon.ttf', 60)
-    introText = introFont.render('Dungeon Crawler', True, WHITE, WHITE)
+    # Define player position
+    playerX = DISPLAY_WIDTH/2
+    playerY = DISPLAY_HEIGHT/2
 
+    VELOCITY = 5 # set movement of player
+
+    # main game loop
     while True:
-        DISPLAYSURF.fill(BLACK) 
-        # break out of intro screen with the space button
-        draw_space_pressed()
-        introTextRect = introText.get_rect()
-        introTextRect.center = (DISPLAY_WIDTH/2,DISPLAY_HEIGHT/8)
-        DISPLAYSURF.blit(introText, introTextRect)
-        if pygame.K_SPACE:
-            return
-    pygame.display.update()
-    fpsClock.tick(FPS)
 
+        DISPLAYSURFACE.fill(BLACK)
+        DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
 
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_Quit()
 
-# main game loop
-while True:
+        keys = pygame.key.get_pressed() # handles key pressed events
+        if keys[pygame.K_RIGHT]:
+            playerX += VELOCITY
+        if keys[pygame.K_LEFT]:
+            playerX -= VELOCITY
+        if keys[pygame.K_UP]:
+            playerY -= VELOCITY
+        if keys[pygame.K_DOWN]:
+            playerY += VELOCITY
 
-    intro_screen()
-    DISPLAYSURF.fill(BLACK)
-    DISPLAYSURF.blit(playerimg, (playerx,playery))
-    DISPLAYSURF.blit(textSurfaceObj, textRectObj)
-
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            game_quit()
-
-    # handles key pressed events
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_RIGHT]:
-        playerx+= VELOCITY
-    if keys[pygame.K_LEFT]:
-        playerx-= VELOCITY
-    if keys[pygame.K_UP]:
-        playery-= VELOCITY
-    if keys[pygame.K_DOWN]:
-        playery+= VELOCITY
-    
-    pygame.display.update()
-    fpsClock.tick(FPS)
-game_quit()
-
-def player_move():
-
-
-
+<<<<<<< HEAD
 #game quit function
 def game_quit():
     pygame.quit()
     sys.exit()
+=======
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+    game_Quit()
+>>>>>>> 058a019ef1d134dc3e843e70d609d192c9465db8
+
+
+
+#def read_template():
+    #mapTemplate =   [WWWW,
+                    # WFFW,
+    #                 WWWW]
+   # for line in mapTemplate:
 
 
 
 
+<<<<<<< HEAD
+=======
+#def make_board():
+    #TODO
 
-        
+def intro_Screen():
+    # Set up title
+    introFont = pygame.font.Font(defaultFont, 60)
+    introText = introFont.render('Dungeon Crawler', True, WHITE)
+    introRect = introText.get_rect()
+    introRect.center = (HALF_DW,HALF_DH/4)
 
+    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
 
+    DISPLAYSURFACE.blit(introText,introRect) # Display title text
+    
+    # Full list of all instructions, line by line
+    instructions = ['Press Spacebar to Play']
+
+    for i in range(len(instructions)):
+        instructText = BASICFONT.render(instructions[i], True, WHITE)
+        instructRect = instructText.get_rect()
+        instructHeight = HALF_DH * 7/8
+        instructRect.centerx = HALF_DW
+        instructRect.top = instructHeight
+        instructHeight += instructHeight + 10
+        DISPLAYSURFACE.blit(instructText, instructRect)
+    
+    while True: # break out of intro screen with the space button
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_Quit()
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    return
+
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+#game quit function
+def game_Quit():
+    pygame.quit()
+    sys.exit()
+
+if __name__ == '__main__':
+    main()
+>>>>>>> 058a019ef1d134dc3e843e70d609d192c9465db8
