@@ -65,16 +65,16 @@ def main():
 
     game_Quit()
 
-def read_template():
-    mapTemplate =   [WWWW,
-                     WFFW,
-                     WWWW]
-    for line in mapTemplate:
+#def read_template():
+    #mapTemplate =   [WWWW,
+                     #WFFW,
+                     #WWWW]
+    #for line in mapTemplate:
 
 
 
 
-def make_board():
+#def make_board():
     #TODO
 
 def intro_Screen():
@@ -89,12 +89,12 @@ def intro_Screen():
     DISPLAYSURFACE.blit(introText,introRect) # Display title text
     
     # Full list of all instructions, line by line
-    instructions = ['Press Spacebar to Play']
-
+    instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
+    instructHeight = HALF_DH * 7/8
     for i in range(len(instructions)):
         instructText = BASICFONT.render(instructions[i], True, WHITE)
         instructRect = instructText.get_rect()
-        instructHeight = HALF_DH * 7/8
+        
         instructRect.centerx = HALF_DW
         instructRect.top = instructHeight
         instructHeight += instructHeight + 10
