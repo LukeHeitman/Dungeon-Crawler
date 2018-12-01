@@ -65,15 +65,22 @@ def main():
 
     game_Quit()
 
+
+
 #def read_template():
     #mapTemplate =   [WWWW,
-                     #WFFW,
-                     #WWWW]
-    #for line in mapTemplate:
+                    # WFFW,
+    #                 WWWW]
+   # for line in mapTemplate:
 
 
 
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> c8d017b1e4a688c78955747d16b39767848e97ea
 #def make_board():
     #TODO
 
@@ -118,3 +125,4 @@ def game_Quit():
 
 if __name__ == '__main__':
     main()
+>>>>>>> 058a019ef1d134dc3e843e70d609d192c9465db8
