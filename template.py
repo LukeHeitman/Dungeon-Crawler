@@ -30,8 +30,8 @@ def main():
     BASICFONT = pygame.font.Font(defaultFont, 20)
 
     # Create global dictionary of all loaded images
-    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'key1' : pygame.image.load('Assets/key1.png'),
-    'key2' : pygame.image.load('Assets/key2.png'),'key3' : pygame.image.load('Assets/key3.png')}
+    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'),
+    'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png')}
 
     intro_Screen() # Begin game with intro screen
 
@@ -46,9 +46,9 @@ def main():
 
         DISPLAYSURFACE.fill(BLACK)
         DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
-        DISPLAYSURFACE.blit(IMAGEDICT['key1'], (10,10)
-        DISPLAYSURFACE.blit(IMAGEDICT['key2'], (50,50))
-        DISPLAYSURFACE.blit(IMAGEDICT['key3'], (100,100))
+        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10)
+        DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
+        DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
 
         for event in pygame.event.get():
             if event.type == QUIT:
