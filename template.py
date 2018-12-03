@@ -46,7 +46,7 @@ def main():
 
         DISPLAYSURFACE.fill(BLACK)
         DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
-        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10)
+        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
         DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
         DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
 
