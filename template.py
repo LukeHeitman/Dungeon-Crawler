@@ -29,7 +29,7 @@ def main():
     pygame.display.set_caption('Dungeon Crawler')
     BASICFONT = pygame.font.Font(defaultFont, 20)
 
-    # Create gloabl dictionary of all loaded images
+    # Create global dictionary of all loaded images
     IMAGEDICT = {'player' : pygame.image.load('Assets/player.png')}
 
     intro_Screen() # Begin game with intro screen
