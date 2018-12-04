@@ -10,8 +10,8 @@ DISPLAY_WIDTH = 500 # width of display window
 DISPLAY_HEIGHT = 500 # height of display window
 HALF_DW = DISPLAY_WIDTH/2
 HALF_DH = DISPLAY_HEIGHT/2
-PLAYER_WIDTH = 17
-PLAYER_HEIGHT = 21
+startX = 
+startY =
 
  #color constants
 BLACK = (0,0,0)
@@ -43,21 +43,6 @@ def main():
 
     # level variable that will be incremented each time the player picks up a key
     level = 1
-
-    class player(object):
-    def __init__(self,x,y,width,height):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.vel = 5
-        
-
-    class key(object):
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
-        self.visible = False
        
         
     player(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 64,64)
@@ -139,3 +124,18 @@ def game_Quit():
 
 if __name__ == '__main__':
     main()
+
+class player(object):
+    def __init__(self,x,y,width,height):
+        self.x = startX
+        self.y = startY
+        self.width = 17
+        self.height = 21
+        self.vel = 5
+        
+
+class key(object):
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.visible = False
