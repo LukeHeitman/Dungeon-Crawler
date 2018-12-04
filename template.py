@@ -52,11 +52,7 @@ def main():
     # main game loop
     while True:
 
-        DISPLAYSURFACE.fill(BLACK)
-        DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
-        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
-        DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
-        DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
+
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -71,6 +67,12 @@ def main():
             playerY -= VELOCITY
         if keys[pygame.K_DOWN] and playerY < DISPLAY_HEIGHT - VELOCITY - PLAYER_HEIGHT:
             playerY += VELOCITY
+        
+        DISPLAYSURFACE.fill(BLACK)
+        DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
+        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
+        DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
+        DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
