@@ -1,71 +1,130 @@
 # Dungeon Crawler
+# By Luke Heitman & Jckson Enright
+# https://github.com/LukeHeitman/Dungeon-Crawler.git
+
 import pygame, sys
 from pygame.locals import *
 
-pygame.init()
+FPS = 30 # Maximum frames per second
+DISPLAY_WIDTH = 500 # width of display window
+DISPLAY_HEIGHT = 500 # height of display window
+HALF_DW = DISPLAY_WIDTH/2
+HALF_DH = DISPLAY_HEIGHT/2
 
-#creating game clock
-FPS = 30 
-fpsClock = pygame.time.Clock()
-
-#creating game surface
-DISPLAY_HEIGHT = 500
-DISPLAY_WIDTH = 500
-
-DISPLAYSURF = pygame.display.set_mode((DISPLAY_HEIGHT,DISPLAY_HEIGHT))
-pygame.display.set_caption('Dungeon Crawler')
-
-#color constants
+ #color constants
 BLACK = (0,0,0)
 WHITE = (255,255,255)
-RED = (255,0,0)
-BLUE = (0,255,0)
-GREEN = (0,0,255)
+defaultFont = 'Assets/dungeon.ttf'
 
-# comment
+TILE = 16 # Size of game tile
 
-#create player sprite
-playerimg = pygame.image.load('Assets/player.png')
-playerx = DISPLAY_WIDTH/2
-playery = DISPLAY_HEIGHT/2
+# code for adding music
+# music = pygame.mixer.music.load('music.mp3')
+# pygame.mixer.music.play(-1)
 
-#create text box
-fontObj = pygame.font.Font('Assets/dungeon.ttf', 60)
-textSurfaceObj = fontObj.render('~ Dungeon Crawler ~', True, WHITE)
-textRectObj = textSurfaceObj.get_rect()
-textRectObj.center = (DISPLAY_WIDTH/2, DISPLAY_HEIGHT/8)
+def main():
+    global FPSCLOCK, DISPLAYSURFACE, BASICFONT, IMAGEDICT
 
-VELOCITY = 5
+    pygame.init() # Pygame initialization
+    FPSCLOCK = pygame.time.Clock()
 
-# main game loop
-while True:
+    # Creation of display surface and font
+    DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT,DISPLAY_HEIGHT))
+    pygame.display.set_caption('Dungeon Crawler')
+    BASICFONT = pygame.font.Font(defaultFont, 20)
 
-    DISPLAYSURF.fill(BLACK)
-    DISPLAYSURF.blit(playerimg, (playerx,playery))
-    DISPLAYSURF.blit(textSurfaceObj, textRectObj)
+    # Create global dictionary of all loaded images
+    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'),
+    'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png')}
 
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            game_quit()
+    intro_Screen() # Begin game with intro screen
 
-    # handles key pressed events
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_RIGHT]:
-        playerx+= VELOCITY
-    if keys[pygame.K_LEFT]:
-        playerx-= VELOCITY
-    if keys[pygame.K_UP]:
-        playery-= VELOCITY
-    if keys[pygame.K_DOWN]:
-        playery+= VELOCITY
+    # Define player position
+    playerX = DISPLAY_WIDTH/2
+    playerY = DISPLAY_HEIGHT/2
+
+    VELOCITY = 5 # set movement of player
+    # level variable that will be incremented each time the player picks up a key
+    level = 1
+
+    # main game loop
+    while True:
+
+        DISPLAYSURFACE.fill(BLACK)
+        DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
+        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
+        DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
+        DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_Quit()
+
+        keys = pygame.key.get_pressed() # handles key pressed events
+        if keys[pygame.K_RIGHT]:
+            playerX += VELOCITY
+        if keys[pygame.K_LEFT]:
+            playerX -= VELOCITY
+        if keys[pygame.K_UP]:
+            playerY -= VELOCITY
+        if keys[pygame.K_DOWN]:
+            playerY += VELOCITY
+
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+    game_Quit()
+
+
+
+#def read_template():
+    #mapTemplate =   [WWWW,
+                    # WFFW,
+    #                 WWWW]
+   # for line in mapTemplate:
+
+
+#def make_board():
+    #TODO
+
+def intro_Screen():
+    # Set up title
+    introFont = pygame.font.Font(defaultFont, 60)
+    introText = introFont.render('Dungeon Crawler', True, WHITE)
+    introRect = introText.get_rect()
+    introRect.center = (HALF_DW,HALF_DH/4)
+
+    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+
+    DISPLAYSURFACE.blit(introText,introRect) # Display title text
     
-    pygame.display.update()
-    fpsClock.tick(FPS)
-game_quit()
+    # Full list of all instructions, line by line
+    instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
+    instructHeight = HALF_DH * 7/8
+    for i in range(len(instructions)):
+        instructText = BASICFONT.render(instructions[i], True, WHITE)
+        instructRect = instructText.get_rect()
+        
+        instructRect.centerx = HALF_DW
+        instructRect.top = instructHeight
+        instructHeight += instructHeight + 10
+        DISPLAYSURFACE.blit(instructText, instructRect)
+    
+    while True: # break out of intro screen with the space button
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_Quit()
+            elif event.type == KEYDOWN:
+                if event.key == K_SPACE:
+                    return
+
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
 
 #game quit function
-def game_quit():
+def game_Quit():
     pygame.quit()
     sys.exit()
 
-#test
+if __name__ == '__main__':
+    main()
