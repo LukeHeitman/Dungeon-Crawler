@@ -79,8 +79,12 @@ def main():
         
         if player.x < ghost.x: # test function for changing visibility
             bkey.visible = True
+            skey.visible = True
+            gkey.visible = True
         else:
-            bkey.visible = False
+            bkey.visible = True
+            skey.visible = True
+            gkey.visible = True
 
         # dispaly all sprites on screen
         DISPLAYSURFACE.fill(BLACK)
