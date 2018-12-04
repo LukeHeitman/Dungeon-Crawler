@@ -18,6 +18,10 @@ defaultFont = 'Assets/dungeon.ttf'
 
 TILE = 16 # Size of game tile
 
+# code for adding music
+# music = pygame.mixer.music.load('music.mp3')
+# pygame.mixer.music.play(-1)
+
 def main():
     global FPSCLOCK, DISPLAYSURFACE, BASICFONT, IMAGEDICT
 
