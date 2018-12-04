@@ -10,6 +10,8 @@ DISPLAY_WIDTH = 500 # width of display window
 DISPLAY_HEIGHT = 500 # height of display window
 HALF_DW = DISPLAY_WIDTH/2
 HALF_DH = DISPLAY_HEIGHT/2
+PLAYER_WIDTH = 17
+PLAYER_HEIGHT = 21
 
  #color constants
 BLACK = (0,0,0)
@@ -61,13 +63,13 @@ def main():
                 game_Quit()
 
         keys = pygame.key.get_pressed() # handles key pressed events
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and playerX < DISPLAY_WIDTH - VELOCITY - PLAYER_WIDTH:
             playerX += VELOCITY
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] and playerX > VELOCITY:
             playerX -= VELOCITY
-        if keys[pygame.K_UP]:
+        if keys[pygame.K_UP] and playerY > VELOCITY:
             playerY -= VELOCITY
-        if keys[pygame.K_DOWN]:
+        if keys[pygame.K_DOWN] and playerY < DISPLAY_HEIGHT - VELOCITY - PLAYER_HEIGHT:
             playerY += VELOCITY
 
         pygame.display.update()
