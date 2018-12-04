@@ -62,10 +62,10 @@ def main():
 
     # main game loop
     while True:
-
         for event in pygame.event.get():
             if event.type == QUIT:
                 game_quit()
+                
 
         keys = pygame.key.get_pressed() # handles key pressed events
         if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.vel - player.width:
@@ -76,6 +76,11 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
             player.y += player.vel
+        
+        if player.x < ghost.x: # test function for changing visibility
+            bkey.visible = True
+        else:
+            bkey.visible = False
 
         # dispaly all sprites on screen
         DISPLAYSURFACE.fill(BLACK)
