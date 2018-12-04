@@ -4,7 +4,7 @@ class Sprite(object):
         self.y = y
         self.width = width
         self.height = height
-        self.vel = 5
+        self.vel = 4
 
     def draw(self, window, image):
         window.blit(image, (self.x, self.y))        

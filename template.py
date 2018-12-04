@@ -18,7 +18,7 @@ TILE = 32 # Size of game tile
 assert DISPLAY_HEIGHT % TILE == 0 # ensures the height is a tile size multiple
 assert DISPLAY_WIDTH % TILE == 0 # ensures the width is a tile size multiple
 
-TILE_WIDTH = int(DISPLAY_WIDTH//TILE)
+TILE_WIDTH = int(DISPLAY_WIDTH//TILE) # splits map into tiles of 32
 TILE_HEIGHT = int(DISPLAY_HEIGHT//TILE)
 
  #color constants
@@ -48,14 +48,13 @@ def main():
 
     intro_screen() # Begin game with intro screen
 
-    # level variable that will be incremented each time the player picks up a key
-    score = 0
+    score = 0 # score variable that will be incremented each time the player picks up a key
 
-    # Spawn all movable sprites into the map
+    # initialize all movable sprites into the map
     player = Sprite(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 24, 32)
     ghost = Sprite(DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4, 32, 48)
 
-    # spawn keys randomly around the map
+    # initialize keys randomly around the map
     bkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
     skey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
     gkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
@@ -77,14 +76,15 @@ def main():
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
             player.y += player.vel
         
-        if player.x < ghost.x: # test function for changing visibility
+        if player.x == ghost.x: # basic test function for changing key visibility
             bkey.visible = True
             skey.visible = True
             gkey.visible = True
+            score += 1
         else:
-            bkey.visible = True
-            skey.visible = True
-            gkey.visible = True
+            bkey.visible = False
+            skey.visible = False
+            gkey.visible = False
 
         # dispaly all sprites on screen
         DISPLAYSURFACE.fill(BLACK)
@@ -93,8 +93,14 @@ def main():
         skey.draw(DISPLAYSURFACE, IMAGEDICT['silverkey'])
         gkey.draw(DISPLAYSURFACE, IMAGEDICT['goldkey'])
         ghost.draw(DISPLAYSURFACE, IMAGEDICT['ghost'])
-        pygame.display.update()
 
+        # test code for displaying score
+        title_text = BASICFONT.render(str(score), True, WHITE)
+        title_rect = title_text.get_rect()
+        title_rect.center = (32, 32)
+        DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
+
+        pygame.display.update()
         FPSCLOCK.tick(FPS)
 
     game_quit()
