@@ -39,13 +39,29 @@ def main():
 
     intro_Screen() # Begin game with intro screen
 
-    # Define player position
-    playerX = DISPLAY_WIDTH/2
-    playerY = DISPLAY_HEIGHT/2
-
-    VELOCITY = 5 # set movement of player
     # level variable that will be incremented each time the player picks up a key
     level = 1
+
+    class player(object):
+    def __init__(self,x,y,width,height):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.vel = 5
+        
+
+    class key(object):
+    def __init__(self,x,y):
+        self.x = x
+        self.y = y
+        self.visible = False
+       
+        
+    player(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 64,64)
+    keyone = (10,10)
+    keytwo = (150,150)
+    keythree = (400,400) 
 
     # main game loop
     while True:
