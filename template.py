@@ -37,7 +37,7 @@ def main():
 
     # Create global dictionary of all loaded images
     IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'),
-    'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png')}
+    'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png')}
 
     intro_Screen() # Begin game with intro screen
 
@@ -51,8 +51,6 @@ def main():
 
     # main game loop
     while True:
-
-
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -68,28 +66,10 @@ def main():
         if keys[pygame.K_DOWN] and playerY < DISPLAY_HEIGHT - VELOCITY - PLAYER_HEIGHT:
             playerY += VELOCITY
         
-        DISPLAYSURFACE.fill(BLACK)
-        DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
-        DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
-        DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
-        DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
-
-        pygame.display.update()
+        window_Draw()
         FPSCLOCK.tick(FPS)
 
     game_Quit()
-
-
-
-#def read_template():
-    #mapTemplate =   [WWWW,
-                    # WFFW,
-    #                 WWWW]
-   # for line in mapTemplate:
-
-
-#def make_board():
-    #TODO
 
 def intro_Screen():
     # Set up title
@@ -125,7 +105,18 @@ def intro_Screen():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-#game quit function
+# draw all objects on screen
+def window_Draw():
+    DISPLAYSURFACE.fill(BLACK)
+    DISPLAYSURFACE.blit(IMAGEDICT['player'], (playerX,playerY))
+    DISPLAYSURFACE.blit(IMAGEDICT['bronzekey'], (10,10))
+    DISPLAYSURFACE.blit(IMAGEDICT['silverkey'], (50,50))
+    DISPLAYSURFACE.blit(IMAGEDICT['goldkey'], (100,100))
+    DISPLAYSURFACE.blit(IMAGEDICT['ghost'], (200,200))
+    pygame.display.update()
+
+
+# game quit function
 def game_Quit():
     pygame.quit()
     sys.exit()
