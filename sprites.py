@@ -8,25 +8,31 @@ class Sprite(pygame.sprite.Sprite):
         self.y = y
         self.vel = 5
         self.step = 0
-        self.direct = False
+        self.left = False
+        self.right = False
+        self.direc = 'Right'
         self.image = dict
-        self.rect = self.image['Idle'][0].get_rect()
+        self.rect = self.image['IdleR'][0].get_rect()
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
 
 
     def draw(self, window):
-        if self.step > 32:
+        if self.step > 15:
             self.step = 0
-        if self.direct == 'Left':
-            window.blit(self.image['Left'][self.step//4], (self.x, self.y))
+        if self.left == True:
+            window.blit(self.image['Left'][self.step // 5], (self.x, self.y))
             self.step += 1
-        elif self.direct == 'Right':
-            window.blit(self.image['Right'][self.step//4], (self.x, self.y))
+        elif self.right == True:
+            window.blit(self.image['Right'][self.step // 5], (self.x, self.y))
             self.step += 1
-        else: 
-            window.blit(self.image['Idle'][self.step//4], (self.x, self.y))
+        elif self.direc == 'Right': 
+            window.blit(self.image['IdleR'][self.step // 5], (self.x, self.y))
             self.step += 1
+        elif self.direc == 'Left':
+            window.blit(self.image['IdleL'][self.step // 5], (self.x, self.y))
+            self.step += 1
+        
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
@@ -34,7 +40,7 @@ class Enemy(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.vel = 1
-        self.image = pygame.image.load(image)
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
@@ -59,7 +65,7 @@ class Key(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.visible = False
-        self.image = pygame.image.load(image)
+        self.image = image
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
         

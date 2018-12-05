@@ -28,9 +28,10 @@ WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
 # Create global dictionary of all image directories
-IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png')}
+IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png'), 'bg' : pygame.image.load('Assets/background.png')}
 
-PLAYERDICT = {'Left' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Idle' : [pygame.image.load('Assets/player/knight_m_idle_anim_f0.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f1.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f2.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f3.png')] }
+PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/player/knight_m_run_anim_f4.png'), pygame.image.load('Assets/player/knight_m_run_anim_f5.png'), pygame.image.load('Assets/player/knight_m_run_anim_f6.png'), pygame.image.load('Assets/player/knight_m_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/player/knight_m_idle_anim_f0.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f1.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f2.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/player/knight_m_idle_anim_f4.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f5.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f6.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f7.png')]}
+
 
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
@@ -53,7 +54,7 @@ def main():
     score = 0 # score variable that will be incremented each time the player picks up a key
 
     # initialize all movable sprites into the map
-    player = Sprite(IMAGEDICT['player'], DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
+    player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
     ghost = Enemy(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
@@ -68,21 +69,23 @@ def main():
             if event.type == QUIT:
                 game_quit()
 
+        player.right = False
+        player.left = False
         keys = pygame.key.get_pressed() # handles key pressed events and moves player
         if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
             player.x += player.vel
-            player.direct = 'Right'
+            player.right = True
+            player.left = False
+            player.direc = 'Right'
         if keys[pygame.K_LEFT] and player.x > player.vel:
             player.x -= player.vel
-            player.direct = 'Left'
+            player.right = False
+            player.left = True
+            player.direc = 'Left'
         if keys[pygame.K_UP] and player.y > player.vel:
             player.y -= player.vel
-            player.direct = False
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
-            player.direct = False
-        else: 
-            player.direct = False
         player.rect.center = (player.x, player.y) #recenters player rect after movement
         
         
@@ -107,7 +110,7 @@ def main():
             end_screen() # if ghost touches player - game over
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.blit(pygame.image.load(IMAGEDICT['bg']), (0, 0)) # background image
+        DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
