@@ -56,6 +56,7 @@ def main():
 
     # initialize keys randomly around the map
     bkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
+    bkey.visible = True
     skey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
     gkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
 
@@ -76,15 +77,24 @@ def main():
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
             player.y += player.vel
         
-        if player.x == ghost.x: # basic test function for changing key visibility
-            bkey.visible = True
+        if player.x == bkey.x and bkey.visible == True: # basic test function for changing key visibility
+            bkey.visible = False
+            bkey.x = key_spawn(TILE_WIDTH) * TILE
+            bkey.y = key_spawn(TILE_HEIGHT) * TILE
             skey.visible = True
+            score += 1
+        if player.x == skey.x and skey.visible == True: # basic test function for changing key visibility
+            skey.visible = False
+            skey.x = key_spawn(TILE_WIDTH) * TILE
+            skey.y = key_spawn(TILE_HEIGHT) * TILE
             gkey.visible = True
             score += 1
-        else:
-            bkey.visible = False
-            skey.visible = False
+        if player.x == gkey.x and gkey.visible == True: # basic test function for changing key visibility
             gkey.visible = False
+            gkey.x = key_spawn(TILE_WIDTH) * TILE
+            gkey.y = key_spawn(TILE_HEIGHT) * TILE
+            bkey.visible = True
+            score += 1
 
         # dispaly all sprites on screen
         DISPLAYSURFACE.fill(BLACK)
