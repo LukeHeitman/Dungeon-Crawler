@@ -83,13 +83,13 @@ def main():
                 key.visible = False
                 key.x = rand_tile(TILE_WIDTH) 
                 key.y = rand_tile(TILE_HEIGHT) 
-                key.rect.center = (bkey.x, bkey.y)
+                key.rect.center = (key.x, key.y)
                 score += 1
                 if key == bkey:
                     skey.visible = True
-                if key == skey:
+                elif key == skey:
                     gkey.visible = True
-                if key == gkey:
+                elif key == gkey:
                     bkey.visible = True
         
         if player.rect.colliderect(ghost.rect):
