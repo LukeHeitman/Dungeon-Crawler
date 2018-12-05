@@ -1,32 +1,30 @@
 import pygame
-class Sprite(object):
-    def __init__(self, x, y, width, height):
+pygame.init()
+class Sprite(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image)
+        self.rect = self.image.get_rect()
         self.x = x
         self.y = y
-        self.width = width
-        self.height = height
         self.vel = 4
 
-    def draw(self, window, image):
-        window.blit(image, (self.x, self.y))
+    def draw(self, window):
+        window.blit(self.image, (self.x, self.y))
 
-    def tile(self, tile):
-        tilex = int(self.x // tile)
-        tiley = int(self.y // tile)
-        return(tilex,tiley)  
+    def collide(self, sprite):
+        return self.rect.colliderect(sprite)
 
-
-class Key(object):
-    def __init__(self, x, y):
+class Key(pygame.sprite.Sprite):
+    def __init__(self, image, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.image.load(image)
+        self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.visible = False
 
-    def draw(self, window, image):
+    def draw(self, window):
         if self.visible == True:
-            window.blit(image, (self.x, self.y))
-    
-    def tile(self, tile):
-        tilex = int(self.x // tile)
-        tiley = int(self.y // tile)
-        return(tilex,tiley)     
+            window.blit(self.image, (self.x, self.y))
+ 

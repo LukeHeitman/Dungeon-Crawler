@@ -50,14 +50,14 @@ def main():
     score = 0 # score variable that will be incremented each time the player picks up a key
 
     # initialize all movable sprites into the map
-    player = Sprite(DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2, 24, 32)
-    ghost = Sprite(DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4, 32, 48)
+    player = Sprite(IMAGEDICT['player'], DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
+    ghost = Sprite(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
-    bkey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
+    bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
     bkey.visible = True
-    skey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
-    gkey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
+    skey = Key(IMAGEDICT['bronzekey'],rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
+    gkey = Key(IMAGEDICT['bronzekey'],rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
 
     # main game loop
     while True:
@@ -76,19 +76,19 @@ def main():
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
             player.y += player.vel
         
-        if player.tile(TILE) == bkey.tile(TILE) and bkey.visible == True: # basic test function for changing key visibility
+        if player.collide(bkey.rect) and bkey.visible == True: # basic test function for changing key visibility
             bkey.visible = False
             bkey.x = rand_tile(TILE_WIDTH) * TILE
             bkey.y = rand_tile(TILE_HEIGHT) * TILE
             skey.visible = True
             score += 1
-        if player.tile(TILE) == skey.tile(TILE) and skey.visible == True: # basic test function for changing key visibility
+        if player.collide(skey.rect) and skey.visible == True: # basic test function for changing key visibility
             skey.visible = False
             skey.x = rand_tile(TILE_WIDTH) * TILE
             skey.y = rand_tile(TILE_HEIGHT) * TILE
             gkey.visible = True
             score += 1
-        if player.tile(TILE) == gkey.tile(TILE) and gkey.visible == True: # basic test function for changing key visibility
+        if player.collide(gkey.rect) and gkey.visible == True: # basic test function for changing key visibility
             gkey.visible = False
             gkey.x = rand_tile(TILE_WIDTH) * TILE
             gkey.y = rand_tile(TILE_HEIGHT) * TILE
@@ -97,11 +97,11 @@ def main():
 
         # dispaly all sprites on screen
         DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0))
-        player.draw(DISPLAYSURFACE, IMAGEDICT['player'])
-        bkey.draw(DISPLAYSURFACE, IMAGEDICT['bronzekey'])
-        skey.draw(DISPLAYSURFACE, IMAGEDICT['silverkey'])
-        gkey.draw(DISPLAYSURFACE, IMAGEDICT['goldkey'])
-        ghost.draw(DISPLAYSURFACE, IMAGEDICT['ghost'])
+        player.draw(DISPLAYSURFACE)
+        bkey.draw(DISPLAYSURFACE)
+        skey.draw(DISPLAYSURFACE)
+        gkey.draw(DISPLAYSURFACE)
+        ghost.draw(DISPLAYSURFACE)
 
         # test code for displaying score
         title_text = BASICFONT.render(str(score), True, WHITE)
