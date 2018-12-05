@@ -28,7 +28,9 @@ WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
 # Create global dictionary of all image directories
-IMAGEDICT = {'player' : 'Assets/player.png', 'bronzekey' : 'Assets/bronzekey.png', 'silverkey' : 'Assets/silverkey.png','goldkey' : 'Assets/goldkey.png', 'ghost' : 'Assets/ghostdown.png', 'bg' :'Assets/background.png'}
+IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png')}
+
+PLAYERDICT = {'Left' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Idle' : [pygame.image.load('Assets/player/knight_m_idle_anim_f0.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f1.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f2.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f3.png')] }
 
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
@@ -69,12 +71,18 @@ def main():
         keys = pygame.key.get_pressed() # handles key pressed events and moves player
         if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
             player.x += player.vel
+            player.direct = 'Right'
         if keys[pygame.K_LEFT] and player.x > player.vel:
             player.x -= player.vel
+            player.direct = 'Left'
         if keys[pygame.K_UP] and player.y > player.vel:
             player.y -= player.vel
+            player.direct = False
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
+            player.direct = False
+        else: 
+            player.direct = False
         player.rect.center = (player.x, player.y) #recenters player rect after movement
         
         

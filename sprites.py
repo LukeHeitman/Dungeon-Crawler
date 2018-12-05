@@ -2,20 +2,31 @@ import pygame
 import math
 pygame.init()
 class Sprite(pygame.sprite.Sprite):
-    def __init__(self, image, x, y):
+    def __init__(self, dict, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.vel = 5
         self.step = 0
-        self.image = pygame.image.load(image)
-        self.rect = self.image.get_rect()
+        self.direct = False
+        self.image = dict
+        self.rect = self.image['Idle'][0].get_rect()
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
 
 
     def draw(self, window):
-        window.blit(self.image, (self.x, self.y))
+        if self.step > 32:
+            self.step = 0
+        if self.direct == 'Left':
+            window.blit(self.image['Left'][self.step//4], (self.x, self.y))
+            self.step += 1
+        elif self.direct == 'Right':
+            window.blit(self.image['Right'][self.step//4], (self.x, self.y))
+            self.step += 1
+        else: 
+            window.blit(self.image['Idle'][self.step//4], (self.x, self.y))
+            self.step += 1
 
 class Enemy(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
