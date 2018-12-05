@@ -18,32 +18,33 @@ TILE = 32 # Size of game tile
 assert DISPLAY_HEIGHT % TILE == 0 # ensures the height is a tile size multiple
 assert DISPLAY_WIDTH % TILE == 0 # ensures the width is a tile size multiple
 
-TILE_WIDTH = int(DISPLAY_WIDTH//TILE) # splits map into tiles of 32
+# splits map into tiles of 32
+TILE_WIDTH = int(DISPLAY_WIDTH//TILE) 
 TILE_HEIGHT = int(DISPLAY_HEIGHT//TILE)
 
  #color constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-DEFAULTFONT = 'Assets/dungeon.ttf'
+DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
+# Create global dictionary of all image directories
+IMAGEDICT = {'player' : 'Assets/player.png', 'bronzekey' : 'Assets/bronzekey.png', 'silverkey' : 'Assets/silverkey.png','goldkey' : 'Assets/goldkey.png', 'ghost' : 'Assets/ghostdown.png', 'bg' :'Assets/background.png'}
 
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
 # pygame.mixer.music.play(-1)
 
 def main():
-    global FPSCLOCK, DISPLAYSURFACE, BASICFONT, IMAGEDICT
+    global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
 
-    # Creation of display surface and font
+    # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
-    BASICFONT = pygame.font.Font(DEFAULTFONT, 20)
-
-    # Create global dictionary of all loaded images
-    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png'), 'bg' : pygame.image.load('Assets/background.png')}
+    FONTSIZE = 30
+    BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
     intro_screen() # Begin game with intro screen
 
@@ -54,49 +55,48 @@ def main():
     ghost = Sprite(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
-    bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
-    bkey.visible = True
-    skey = Key(IMAGEDICT['bronzekey'],rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
-    gkey = Key(IMAGEDICT['bronzekey'],rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
-
-    # main game loop
-    while True:
-        for event in pygame.event.get():
+    bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    bkey.visible = True # make first key visible
+    skey = Key(IMAGEDICT['silverkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    gkey = Key(IMAGEDICT['goldkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    game_keys = [bkey,skey,gkey]
+    
+    while True: # main game loop
+        for event in pygame.event.get(): # exits game if user clicks X
             if event.type == QUIT:
                 game_quit()
-                
 
-        keys = pygame.key.get_pressed() # handles key pressed events
-        if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.vel - player.width:
+        keys = pygame.key.get_pressed() # handles key pressed events and moves player
+        if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
             player.x += player.vel
         if keys[pygame.K_LEFT] and player.x > player.vel:
             player.x -= player.vel
         if keys[pygame.K_UP] and player.y > player.vel:
             player.y -= player.vel
-        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
+        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
+        player.rect.center = (player.x, player.y) #recenters player rect after movement
         
-        if player.collide(bkey.rect) and bkey.visible == True: # basic test function for changing key visibility
-            bkey.visible = False
-            bkey.x = rand_tile(TILE_WIDTH) * TILE
-            bkey.y = rand_tile(TILE_HEIGHT) * TILE
-            skey.visible = True
-            score += 1
-        if player.collide(skey.rect) and skey.visible == True: # basic test function for changing key visibility
-            skey.visible = False
-            skey.x = rand_tile(TILE_WIDTH) * TILE
-            skey.y = rand_tile(TILE_HEIGHT) * TILE
-            gkey.visible = True
-            score += 1
-        if player.collide(gkey.rect) and gkey.visible == True: # basic test function for changing key visibility
-            gkey.visible = False
-            gkey.x = rand_tile(TILE_WIDTH) * TILE
-            gkey.y = rand_tile(TILE_HEIGHT) * TILE
-            bkey.visible = True
-            score += 1
+        # collision testing for keys
+        for key in game_keys:
+            if player.rect.colliderect(key.rect) and key.visible == True:
+                key.visible = False
+                key.x = rand_tile(TILE_WIDTH) 
+                key.y = rand_tile(TILE_HEIGHT) 
+                key.rect.center = (bkey.x, bkey.y)
+                score += 1
+                if key == bkey:
+                    skey.visible = True
+                if key == skey:
+                    gkey.visible = True
+                if key == gkey:
+                    bkey.visible = True
+        
+        if player.rect.colliderect(ghost.rect):
+            end_screen()
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0))
+        DISPLAYSURFACE.blit(pygame.image.load(IMAGEDICT['bg']), (0, 0))
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
@@ -126,13 +126,13 @@ def intro_screen():
 
     # Full list of all instructions, line by line
     instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
-    top_margin = HALF_DH * 7/8
+    instruct_start = HALF_DH * 7/8
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
         instruct_rect = instruct_text.get_rect()
         instruct_rect.centerx = HALF_DW
-        instruct_rect.top = top_margin
-        top_margin += 20 + 10
+        instruct_rect.top = instruct_start
+        instruct_start += FONTSIZE + 10
         DISPLAYSURFACE.blit(instruct_text, instruct_rect)
 
     while True: # break out of intro screen with the space button
@@ -148,7 +148,7 @@ def intro_screen():
 
 
 def rand_tile(max):
-    rtile = random.randint(0, max -1)
+    rtile = random.randint(0, max -1) * TILE
     return rtile
 
 
@@ -170,7 +170,7 @@ def end_screen():
         instruct_rect = instruct_text.get_rect()
         instruct_rect.centerx = HALF_DW
         instruct_rect.top = top_margin
-        top_margin += 20 + 10
+        top_margin += FONTSIZE + 10
         DISPLAYSURFACE.blit(instruct_text, instruct_rect)
 
     while True: # break out of intro screen with the space button
