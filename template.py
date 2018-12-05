@@ -52,7 +52,7 @@ def main():
 
     # initialize all movable sprites into the map
     player = Sprite(IMAGEDICT['player'], DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
-    ghost = Sprite(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
+    ghost = Enemy(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
     bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
@@ -75,7 +75,8 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
-        player.rect.center = (player.x, player.y) #recenters player rect after movement
+        player.rect.center = (player.x, player.y)
+        ghost.move_towards_player(player) #recenters player rect after movement
         
         # collision testing for keys
         for key in game_keys:
