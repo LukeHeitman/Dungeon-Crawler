@@ -49,7 +49,6 @@ def main():
     intro_screen() # Begin game with intro screen
 
     score = 0 # score variable that will be incremented each time the player picks up a key
-    test = {'x' : [0, 1, 2, 3], 'y' : [4, 5, 6, 7]}
 
     # initialize all movable sprites into the map
     player = Sprite(IMAGEDICT['player'], DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
