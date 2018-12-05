@@ -6,7 +6,7 @@ class Sprite(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
-        self.vel = 4
+        self.vel = 5
         self.image = pygame.image.load(image)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)

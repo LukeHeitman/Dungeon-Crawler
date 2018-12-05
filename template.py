@@ -93,6 +93,7 @@ def main():
                     gkey.visible = True
                 elif key == gkey:
                     bkey.visible = True
+                    ghost.vel += 1 # ghost speeds up every 3 keys
         
         if player.rect.colliderect(ghost.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
