@@ -75,11 +75,12 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
-        player.rect.center = (player.x, player.y)
-        ghost.move_towards_player(player) #recenters player rect after movement
+        player.rect.center = (player.x, player.y) #recenters player rect after movement
         
-        # collision testing for keys
-        for key in game_keys:
+        
+        ghost.move_towards_player(player) # move ghost sprite towards player
+        
+        for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
                 key.visible = False
                 key.x = rand_tile(TILE_WIDTH) 
@@ -93,11 +94,11 @@ def main():
                 elif key == gkey:
                     bkey.visible = True
         
-        if player.rect.colliderect(ghost.rect):
-            end_screen()
+        if player.rect.colliderect(ghost.rect): # collision testing for ghost
+            end_screen() # if ghost touches player - game over
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.blit(pygame.image.load(IMAGEDICT['bg']), (0, 0))
+        DISPLAYSURFACE.blit(pygame.image.load(IMAGEDICT['bg']), (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
