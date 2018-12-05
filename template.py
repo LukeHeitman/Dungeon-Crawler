@@ -27,7 +27,6 @@ WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf'
 
 
-
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
 # pygame.mixer.music.play(-1)
@@ -44,7 +43,7 @@ def main():
     BASICFONT = pygame.font.Font(DEFAULTFONT, 20)
 
     # Create global dictionary of all loaded images
-    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png')}
+    IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png'), 'ghost' : pygame.image.load('Assets/ghostdown.png'), 'bg' : pygame.image.load('Assets/background.png')}
 
     intro_screen() # Begin game with intro screen
 
@@ -55,10 +54,10 @@ def main():
     ghost = Sprite(DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4, 32, 48)
 
     # initialize keys randomly around the map
-    bkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
+    bkey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
     bkey.visible = True
-    skey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
-    gkey = Key(key_spawn(TILE_WIDTH) * TILE, key_spawn(TILE_HEIGHT) * TILE)
+    skey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
+    gkey = Key(rand_tile(TILE_WIDTH) * TILE, rand_tile(TILE_HEIGHT) * TILE)
 
     # main game loop
     while True:
@@ -77,27 +76,27 @@ def main():
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.vel - player.height:
             player.y += player.vel
         
-        if player.x == bkey.x and bkey.visible == True: # basic test function for changing key visibility
+        if player.tile(TILE) == bkey.tile(TILE) and bkey.visible == True: # basic test function for changing key visibility
             bkey.visible = False
-            bkey.x = key_spawn(TILE_WIDTH) * TILE
-            bkey.y = key_spawn(TILE_HEIGHT) * TILE
+            bkey.x = rand_tile(TILE_WIDTH) * TILE
+            bkey.y = rand_tile(TILE_HEIGHT) * TILE
             skey.visible = True
             score += 1
-        if player.x == skey.x and skey.visible == True: # basic test function for changing key visibility
+        if player.tile(TILE) == skey.tile(TILE) and skey.visible == True: # basic test function for changing key visibility
             skey.visible = False
-            skey.x = key_spawn(TILE_WIDTH) * TILE
-            skey.y = key_spawn(TILE_HEIGHT) * TILE
+            skey.x = rand_tile(TILE_WIDTH) * TILE
+            skey.y = rand_tile(TILE_HEIGHT) * TILE
             gkey.visible = True
             score += 1
-        if player.x == gkey.x and gkey.visible == True: # basic test function for changing key visibility
+        if player.tile(TILE) == gkey.tile(TILE) and gkey.visible == True: # basic test function for changing key visibility
             gkey.visible = False
-            gkey.x = key_spawn(TILE_WIDTH) * TILE
-            gkey.y = key_spawn(TILE_HEIGHT) * TILE
+            gkey.x = rand_tile(TILE_WIDTH) * TILE
+            gkey.y = rand_tile(TILE_HEIGHT) * TILE
             bkey.visible = True
             score += 1
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.fill(BLACK)
+        DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0))
         player.draw(DISPLAYSURFACE, IMAGEDICT['player'])
         bkey.draw(DISPLAYSURFACE, IMAGEDICT['bronzekey'])
         skey.draw(DISPLAYSURFACE, IMAGEDICT['silverkey'])
@@ -148,9 +147,9 @@ def intro_screen():
         FPSCLOCK.tick(FPS)
 
 
-def key_spawn(max):
-    coord = random.randint(0, max -1)
-    return coord
+def rand_tile(max):
+    rtile = random.randint(0, max -1)
+    return rtile
 
 
 def end_screen():
