@@ -14,13 +14,17 @@ DISPLAY_HEIGHT = 512 # height of display window
 HALF_DW = DISPLAY_WIDTH/2
 HALF_DH = DISPLAY_HEIGHT/2
 
-TILE = 32 # Size of game tile
+BLOCK = 16 # Size of background level tiles (walls, floors, etc...)
+TILE = 32 # Size of game tile for keys and enemies
 assert DISPLAY_HEIGHT % TILE == 0 # ensures the height is a tile size multiple
 assert DISPLAY_WIDTH % TILE == 0 # ensures the width is a tile size multiple
 
 # splits map into tiles of 32
 TILE_WIDTH = int(DISPLAY_WIDTH//TILE) 
 TILE_HEIGHT = int(DISPLAY_HEIGHT//TILE)
+BLOCK_WIDTH = int(DISPLAY_WIDTH//BLOCK) 
+BLOCK_HEIGHT = int(DISPLAY_HEIGHT//BLOCK)
+TOP_MARGIN = 2
 
  #color constants
 BLACK = (0, 0, 0)
@@ -34,6 +38,8 @@ PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.p
 
 MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
+LEVELDICT = {'wall' : pygame.image.load('Assets/level/wall_mid.png'), 'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'), 'floor' : [pygame.image.load('Assets/level/floor_1.png'), pygame.image.load('Assets/level/floor_2.png'), pygame.image.load('Assets/level/floor_3.png'), pygame.image.load('Assets/level/floor_4.png')], 'wall_top' : pygame.image.load('Assets/level/wall_top_mid.png'), 'side_wall_right' : pygame.image.load('Assets/level/wall_side_mid_left.png'), 'side_wall_left' : pygame.image.load('Assets/level/wall_side_mid_right.png')}
+
 
 def main():
     global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
@@ -44,7 +50,7 @@ def main():
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
-    FONTSIZE = 30
+    FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
     intro_screen() # Begin game with intro screen
@@ -54,10 +60,10 @@ def main():
     monster = Monster(MONSTERDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
-    bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    bkey = Key(IMAGEDICT['bronzekey'], rand_xtile(), rand_ytile())
     bkey.visible = True # make first key visible
-    skey = Key(IMAGEDICT['silverkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
-    gkey = Key(IMAGEDICT['goldkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    skey = Key(IMAGEDICT['silverkey'], rand_xtile(), rand_ytile())
+    gkey = Key(IMAGEDICT['goldkey'], rand_xtile(), rand_ytile())
     game_keys = [bkey,skey,gkey]
     
     score = 0
@@ -93,8 +99,7 @@ def main():
         for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
                 key.visible = False
-                key.x = rand_tile(TILE_WIDTH) 
-                key.y = rand_tile(TILE_HEIGHT) 
+                key.x, key.y = rand_xtile(), rand_ytile() 
                 key.rect.center = (key.x, key.y)
                 score += 1
                 if key == bkey:
@@ -107,9 +112,32 @@ def main():
         
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
+       
+        DISPLAYSURFACE.fill(BLACK)
+        
+        for y in range(BLOCK_HEIGHT): # create level environment
+            for x in range(BLOCK_WIDTH):
+                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
+                if y == 2:
+                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
+                if y == 3:
+                    if x == BLOCK_WIDTH/2 - 1 or x == BLOCK_WIDTH/2:
+                        print(x,y)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y-1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+                    else:
+                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                if y > 3:
+                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
+                    if x == 0:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
+                    if x == BLOCK_WIDTH - 1:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
+                    
+                        
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
+        #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
@@ -117,9 +145,9 @@ def main():
         monster.draw(DISPLAYSURFACE)
 
         # test code for displaying score
-        score_text = BASICFONT.render(str(score), True, WHITE)
+        score_text = BASICFONT.render('Score:  ' + str(score), True, WHITE)
         score_rect = score_text.get_rect()
-        score_rect.center = (32, 32)
+        score_rect.topleft = (10, 10)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
@@ -159,8 +187,13 @@ def intro_screen():
         FPSCLOCK.tick(FPS)
 
 
-def rand_tile(max):
-    rtile = random.randint(0, max -1) * TILE
+def rand_xtile():
+    rtile = random.randint(0, TILE_WIDTH -1) * TILE
+    return rtile
+
+
+def rand_ytile():
+    rtile = random.randint(2, TILE_HEIGHT -1) * TILE
     return rtile
 
 
