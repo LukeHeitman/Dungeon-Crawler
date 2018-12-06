@@ -34,6 +34,9 @@ PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.p
 
 MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
+SCORE = 0
+LEVEL = 0
+
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
 # pygame.mixer.music.play(-1)
@@ -51,8 +54,6 @@ def main():
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
     intro_screen() # Begin game with intro screen
-
-    score = 0 # score variable that will be incremented each time the player picks up a key
 
     # initialize all movable sprites into the map
     player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
@@ -88,10 +89,8 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
-        
         player.rect.center = (player.x, player.y) #recenters player rect after movement
-        
-        
+
         monster.move_towards_player(player) # move ghost sprite towards player
         
         for key in game_keys: # collision testing for keys
@@ -100,7 +99,7 @@ def main():
                 key.x = rand_tile(TILE_WIDTH) 
                 key.y = rand_tile(TILE_HEIGHT) 
                 key.rect.center = (key.x, key.y)
-                score += 1
+                SCORE += 1
                 if key == bkey:
                     skey.visible = True
                 elif key == skey:
@@ -121,10 +120,10 @@ def main():
         monster.draw(DISPLAYSURFACE)
 
         # test code for displaying score
-        title_text = BASICFONT.render(str(score), True, WHITE)
-        title_rect = title_text.get_rect()
-        title_rect.center = (32, 32)
-        DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
+        score_text = BASICFONT.render(str(SCORE), True, WHITE)
+        score_rect = score_text.get_rect()
+        score_rect.center = (32, 32)
+        DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
 
         pygame.display.update()
         FPSCLOCK.tick(FPS)
