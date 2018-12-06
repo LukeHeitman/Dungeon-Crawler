@@ -6,7 +6,7 @@ class Sprite(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
-        self.vel = 10
+        self.vel = 5
         self.step = 0
         self.dx = 0
         self.dx = 0
