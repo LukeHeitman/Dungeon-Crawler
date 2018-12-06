@@ -5,6 +5,7 @@
 import pygame
 import sys
 import random
+from imagedicts import *
 from sprites import *
 from pygame.locals import *
 
@@ -14,77 +15,118 @@ DISPLAY_HEIGHT = 512 # height of display window
 HALF_DW = DISPLAY_WIDTH/2
 HALF_DH = DISPLAY_HEIGHT/2
 
-TILE = 32 # Size of game tile
+BLOCK = 16 # Size of background level tiles (walls, floors, etc...)
+TILE = 32 # Size of game tile for keys and enemies
 assert DISPLAY_HEIGHT % TILE == 0 # ensures the height is a tile size multiple
 assert DISPLAY_WIDTH % TILE == 0 # ensures the width is a tile size multiple
 
 # splits map into tiles of 32
 TILE_WIDTH = int(DISPLAY_WIDTH//TILE) 
 TILE_HEIGHT = int(DISPLAY_HEIGHT//TILE)
+BLOCK_WIDTH = int(DISPLAY_WIDTH//BLOCK) 
+BLOCK_HEIGHT = int(DISPLAY_HEIGHT//BLOCK)
+TOP_MARGIN = 2
 
  #color constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
-# Create global dictionary of all image directories
-IMAGEDICT = {'player' : 'Assets/player.png', 'bronzekey' : 'Assets/bronzekey.png', 'silverkey' : 'Assets/silverkey.png','goldkey' : 'Assets/goldkey.png', 'ghost' : 'Assets/ghostdown.png', 'bg' :'Assets/background.png'}
-
-# code for adding music
-# music = pygame.mixer.music.load('music.mp3')
-# pygame.mixer.music.play(-1)
-
 def main():
     global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
-
+   
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
-    FONTSIZE = 30
+    FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
     intro_screen() # Begin game with intro screen
 
-    score = 0 # score variable that will be incremented each time the player picks up a key
-
     # initialize all movable sprites into the map
-    player = Sprite(IMAGEDICT['player'], DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
-    ghost = Enemy(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
+    player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
+    monster = Monster(MONSTERDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
-    bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
     bkey.visible = True # make first key visible
-    skey = Key(IMAGEDICT['silverkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
-    gkey = Key(IMAGEDICT['goldkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
+    skey = Key(KEYDICT['silverkey'], rand_xtile(), rand_ytile())
+    gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
     game_keys = [bkey,skey,gkey]
     
+    score = 0
+    
+    print(score)
+    print()
+
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
             if event.type == QUIT:
                 game_quit()
 
+        player.right = False
+        player.left = False
+        
         keys = pygame.key.get_pressed() # handles key pressed events and moves player
         if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
             player.x += player.vel
+            player.right = True
+            player.left = False
+            player.direc = 'Right'
         if keys[pygame.K_LEFT] and player.x > player.vel:
             player.x -= player.vel
-        if keys[pygame.K_UP] and player.y > player.vel:
+            player.right = False
+            player.left = True
+            player.direc = 'Left'
+        if keys[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
             player.y -= player.vel
-        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
+        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
             player.y += player.vel
         player.rect.center = (player.x, player.y) #recenters player rect after movement
+
+        monster.move_towards_player(player) # move ghost sprite towards player
+
+        DISPLAYSURFACE.fill(BLACK)
         
-        
-        ghost.move_towards_player(player) # move ghost sprite towards player
+        for y in range(BLOCK_HEIGHT): # create level environment
+            for x in range(BLOCK_WIDTH):
+                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
+                if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
+                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
+                if y == 3:
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
+                    if score > 5:
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2+1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
+
+
+                    else:
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+
+                    if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
+                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                if 3 < y < BLOCK_HEIGHT - 1:
+                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
+                    if x == 0:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
+                    if x == BLOCK_WIDTH - 1:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
+                if y == BLOCK_HEIGHT - 1:
+                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
         
         for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
                 key.visible = False
-                key.x = rand_tile(TILE_WIDTH) 
-                key.y = rand_tile(TILE_HEIGHT) 
+                key.x, key.y = rand_xtile(), rand_ytile() 
                 key.rect.center = (key.x, key.y)
                 score += 1
                 if key == bkey:
@@ -93,25 +135,27 @@ def main():
                     gkey.visible = True
                 elif key == gkey:
                     bkey.visible = True
-                    ghost.vel += 1 # ghost speeds up every 3 keys
+                    monster.vel += 1 # ghost speeds up every 3 keys
         
-        if player.rect.colliderect(ghost.rect): # collision testing for ghost
+        if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
+        
+        if score > 5 and player.rect.colliderect(door_open_rect):
+            game_win()
 
         # dispaly all sprites on screen
-        DISPLAYSURFACE.blit(pygame.image.load(IMAGEDICT['bg']), (0, 0)) # background image
+        #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
         gkey.draw(DISPLAYSURFACE)
-        ghost.draw(DISPLAYSURFACE)
+        monster.draw(DISPLAYSURFACE)
 
         # test code for displaying score
-        title_text = BASICFONT.render(str(score), True, WHITE)
-        title_rect = title_text.get_rect()
-        title_rect.center = (32, 32)
-        DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
-
+        score_text = BASICFONT.render('Score:  ' + str(score), True, WHITE)
+        score_rect = score_text.get_rect()
+        score_rect.topleft = (10, 10)
+        DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -150,8 +194,13 @@ def intro_screen():
         FPSCLOCK.tick(FPS)
 
 
-def rand_tile(max):
-    rtile = random.randint(0, max -1) * TILE
+def rand_xtile():
+    rtile = random.randint(0, TILE_WIDTH -1) * TILE
+    return rtile
+
+
+def rand_ytile():
+    rtile = random.randint(2, TILE_HEIGHT -1) * TILE
     return rtile
 
 
@@ -182,6 +231,42 @@ def end_screen():
                 game_quit()
             elif event.type == KEYDOWN:
                 if event.key == K_r:
+                    main()
+
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+def game_win():
+
+    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+
+    # Set up game over
+    title_font = pygame.font.Font(DEFAULTFONT, 60)
+    title_text = title_font.render('YOU WON', True, WHITE)
+    title_rect = title_text.get_rect()
+    title_rect.center = (HALF_DW, HALF_DH/4)
+    DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
+
+    # Full list of information
+    instructions = ['You collected all the keys and managed to escape!', 'Press R to replay']
+    top_margin = HALF_DH * 7/8
+    for line in instructions:
+        instruct_text = BASICFONT.render(line, True, WHITE)
+        instruct_rect = instruct_text.get_rect()
+        instruct_rect.centerx = HALF_DW
+        instruct_rect.top = top_margin
+        top_margin += FONTSIZE + 10
+        DISPLAYSURFACE.blit(instruct_text, instruct_rect)
+
+    while True: # break out of intro screen with the space button
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_quit()
+            elif event.type == KEYDOWN:
+                if event.key == K_r:
+                    main()
+                if event.key == K_n:
+                    LEVEL += 1
                     main()
 
         pygame.display.update()
