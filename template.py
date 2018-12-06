@@ -67,7 +67,9 @@ def main():
     game_keys = [bkey,skey,gkey]
     
     score = 0
-    level = 0
+    
+    print(score)
+    print()
 
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
@@ -88,9 +90,9 @@ def main():
             player.right = False
             player.left = True
             player.direc = 'Left'
-        if keys[pygame.K_UP] and player.y > player.vel:
+        if keys[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
             player.y -= player.vel
-        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
+        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
             player.y += player.vel
         player.rect.center = (player.x, player.y) #recenters player rect after movement
 
@@ -121,12 +123,14 @@ def main():
 
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
                         DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
-                if y > 3:
+                if 3 < y < BLOCK_HEIGHT - 1:
                     DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
                     if x == 0:
                         DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
                     if x == BLOCK_WIDTH - 1:
                         DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
+                if y == BLOCK_HEIGHT - 1:
+                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
         
         for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
@@ -242,6 +246,7 @@ def end_screen():
         FPSCLOCK.tick(FPS)
 
 def game_win():
+
     DISPLAYSURFACE.fill(BLACK) # Display background image TODO
 
     # Set up game over
@@ -268,6 +273,9 @@ def game_win():
                 game_quit()
             elif event.type == KEYDOWN:
                 if event.key == K_r:
+                    main()
+                if event.key == K_n:
+                    LEVEL += 1
                     main()
 
         pygame.display.update()
