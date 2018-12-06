@@ -14,7 +14,7 @@ class Sprite(pygame.sprite.Sprite):
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
         self.rect.topleft = (self.x, self.y)
-        self.hitbox = self.rect.inflate(-15, -15)
+        self.hitbox = self.rect.inflate(-10, -10)
         self.width , self.height = self.rect.size
 
 
@@ -56,7 +56,7 @@ class Monster(pygame.sprite.Sprite):
         self.x += self.dx * self.vel
         self.y += self.dy * self.vel
         self.rect.topleft = (self.x, self.y)
-        self.hitbox = self.rect.inflate(-15, -15)
+        self.hitbox = self.rect.inflate(-10, -10)
 
     def draw(self, window):
         if self.step > 15:
@@ -77,7 +77,7 @@ class Key(pygame.sprite.Sprite):
         self.visible = False
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
         
 
     def draw(self, window):

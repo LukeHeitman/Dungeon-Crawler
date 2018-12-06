@@ -44,6 +44,8 @@ def main():
     FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
+    keys_left = 3
+
     intro_screen() # Begin game with intro screen
 
     # initialize all movable sprites into the map
@@ -127,23 +129,27 @@ def main():
                      DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
         
         for key in game_keys: # collision testing for keys
-            if player.rect.colliderect(key.rect) and key.visible == True:
+            if player.hitbox.colliderect(key.rect) and key.visible == True:
                 key.visible = False
                 key.x, key.y = rand_xtile(), rand_ytile() 
                 key.rect.center = (key.x, key.y)
                 score += 1
                 if key == bkey:
                     skey.visible = True
+                    keys_left -= 1
+                    monster.vel += 1
                 elif key == skey:
                     gkey.visible = True
+                    keys_left -= 1
+                    monster.vel += 1
                 elif key == gkey:
-                    bkey.visible = True
+                    keys_left -= 1                    
                     monster.vel += 1 # ghost speeds up every 3 keys
         
-        if player.rect.colliderect(monster.hitbox): # collision testing for ghost
+        if player.hitbox.colliderect(monster.hitbox): # collision testing for ghost
             end_screen() # if ghost touches player - game over
         
-        if score > 0 and player.rect.colliderect(door_open_rect):
+        if score > 0 and player.hitbox.colliderect(door_open_rect):
             game_win()
 
         # dispaly all sprites on screen
