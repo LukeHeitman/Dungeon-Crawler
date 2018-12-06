@@ -38,7 +38,7 @@ PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.p
 
 MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
-LEVELDICT = {'wall' : pygame.image.load('Assets/level/wall_mid.png'), 'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'), 'floor' : [pygame.image.load('Assets/level/floor_1.png'), pygame.image.load('Assets/level/floor_2.png'), pygame.image.load('Assets/level/floor_3.png'), pygame.image.load('Assets/level/floor_4.png')], 'wall_top' : pygame.image.load('Assets/level/wall_top_mid.png'), 'side_wall_right' : pygame.image.load('Assets/level/wall_side_mid_left.png'), 'side_wall_left' : pygame.image.load('Assets/level/wall_side_mid_right.png')}
+LEVELDICT = {'wall' : pygame.image.load('Assets/level/wall_mid.png'), 'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'),'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'), 'floor' : [pygame.image.load('Assets/level/floor_1.png'), pygame.image.load('Assets/level/floor_2.png'), pygame.image.load('Assets/level/floor_3.png'), pygame.image.load('Assets/level/floor_4.png')], 'wall_top' : pygame.image.load('Assets/level/wall_top_mid.png'), 'side_wall_right' : pygame.image.load('Assets/level/wall_side_mid_left.png'), 'side_wall_left' : pygame.image.load('Assets/level/wall_side_mid_right.png')}
 
 
 def main():
@@ -121,8 +121,7 @@ def main():
                 if y == 2:
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
-                    if x == BLOCK_WIDTH/2 - 1 or x == BLOCK_WIDTH/2:
-                        print(x,y)
+                    if (BLOCK_WIDTH/2 - 3) < x < (BLOCK_WIDTH/2 + 2):
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y-1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
                     else:
