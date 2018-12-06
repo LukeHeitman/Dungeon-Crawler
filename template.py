@@ -38,6 +38,9 @@ def main():
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
    
+    # load music and set it to play forever
+    pygame.mixer.music.load('Assets/mariomusic.mp3')
+    pygame.mixer.music.play(-1)
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -131,19 +134,23 @@ def main():
                 score += 1
                 if key == bkey:
                     skey.visible = True
+                    monster.vel += 1
                 elif key == skey:
                     gkey.visible = True
+                    monster.vel += 1
                 elif key == gkey:
                     bkey.visible = True
-                    monster.vel += 1 # ghost speeds up every 3 keys
+                    monster.vel += 1 
         
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
         
         if score > 5 and player.rect.colliderect(door_open_rect):
             game_win()
+            # Stop music if the player exits through the door
+            pygame.mixer.music.stop()
 
-        # dispaly all sprites on screen
+        # display all sprites on screen
         #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
