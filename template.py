@@ -38,6 +38,9 @@ def main():
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
    
+    # load music and set it to play forever
+    pygame.mixer.music.load('Assets/mariomusic.mp3')
+    pygame.mixer.music.play(-1)
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -60,8 +63,12 @@ def main():
     game_keys = [bkey,skey,gkey]
     
     score = 0
+    # variable to keep track of number of lives
+    lives = 3
+
     
     print(score)
+    print(lives)
     print()
 
     while True: # main game loop
@@ -136,6 +143,7 @@ def main():
                 score += 1
                 if key == bkey:
                     skey.visible = True
+<<<<<<< HEAD
                     keys_left -= 1
                     monster.vel += 1
                 elif key == skey:
@@ -145,14 +153,27 @@ def main():
                 elif key == gkey:
                     keys_left -= 1                    
                     monster.vel += 1 # ghost speeds up every 3 keys
+=======
+                    monster.vel += 1
+                elif key == skey:
+                    gkey.visible = True
+                    monster.vel += 1
+                elif key == gkey:
+                    bkey.visible = True
+                    monster.vel += 1 
+>>>>>>> jedits
         
         if player.hitbox.colliderect(monster.hitbox): # collision testing for ghost
             end_screen() # if ghost touches player - game over
+            # player loses a life
+            lives = lives - 1
         
         if score > 0 and player.hitbox.colliderect(door_open_rect):
             game_win()
+            # Stop music if the player exits through the door
+            pygame.mixer.music.stop()
 
-        # dispaly all sprites on screen
+        # display all sprites on screen
         #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
@@ -165,6 +186,12 @@ def main():
         score_rect = score_text.get_rect()
         score_rect.topleft = (10, 10)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
+    
+        # code for displaying lives
+        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
+        life_rect = life_text.get_rect()
+        life_rect.topright = (DISPLAY_WIDTH-10, 10)
+        DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -181,8 +208,9 @@ def intro_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of all instructions, line by line
-    instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
-    instruct_start = HALF_DH * 7/8
+    instructions = ['Collect keys to escape...', 'Stay away from the monsters!', 'PRESS SPACEBAR TO PLAY', 'USE ARROW KEYS TO MOVE']
+
+    instruct_start = HALF_DH * 7/8 
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
         instruct_rect = instruct_text.get_rect()
