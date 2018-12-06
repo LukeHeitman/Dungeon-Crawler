@@ -13,7 +13,8 @@ class Sprite(pygame.sprite.Sprite):
         self.direc = 'Right'
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
+        self.hitbox = self.rect.inflate(-10, -10)
         self.width , self.height = self.rect.size
 
 
@@ -43,19 +44,19 @@ class Monster(pygame.sprite.Sprite):
         self.step = 0
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
-        self.rect = self.rect.inflate(-15, -15)
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
         self.width , self.height = self.rect.size
     
     def move_towards_player(self, player):
         # find normalized direction vector (dx, dy) between enemy and player
-        self.dx, self.dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
+        self.dx, self.dy = player.rect.centerx - self.rect.centerx, player.rect.centery - self.rect.centery
         dist = math.hypot(self.dx, self.dy)
         self.dx, self.dy = self.dx / dist, self.dy / dist
         # move along this normalized vector towards the player at current speed
         self.x += self.dx * self.vel
         self.y += self.dy * self.vel
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
+        self.hitbox = self.rect.inflate(-10, -10)
 
     def draw(self, window):
         if self.step > 15:
@@ -76,7 +77,7 @@ class Key(pygame.sprite.Sprite):
         self.visible = False
         self.image = image
         self.rect = self.image.get_rect()
-        self.rect.center = (self.x, self.y)
+        self.rect.topleft = (self.x, self.y)
         
 
     def draw(self, window):

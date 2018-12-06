@@ -38,11 +38,16 @@ def main():
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
    
+    # load music and set it to play forever
+    pygame.mixer.music.load('Assets/mariomusic.mp3')
+    pygame.mixer.music.play(-1)
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
     FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
+
+    keys_left = 3
 
     intro_screen() # Begin game with intro screen
 
@@ -58,9 +63,8 @@ def main():
     game_keys = [bkey,skey,gkey]
     
     score = 0
-    
-    print(score)
-    print()
+    # variable to keep track of number of lives
+    lives = 3
 
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
@@ -85,7 +89,8 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
             player.y += player.vel
-        player.rect.center = (player.x, player.y) #recenters player rect after movement
+        player.rect.topleft = (player.x, player.y)
+        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
 
         monster.move_towards_player(player) # move ghost sprite towards player
 
@@ -97,9 +102,14 @@ def main():
                 if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
+<<<<<<< HEAD
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                     #pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
                     if score > 0:
+=======
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
+                    if keys_left == 0:
+>>>>>>> cb0a3e7d8466c8f6e11146b648e91f8f081f9252
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -107,13 +117,17 @@ def main():
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
+<<<<<<< HEAD
                         #door_open_rect.fill(WHITE)
                         #door_open_rect.inflate(-35, -35)
+=======
+>>>>>>> cb0a3e7d8466c8f6e11146b648e91f8f081f9252
 
 
                     else:
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+                    door_open_hitbox = door_open_rect.inflate(-20, -20)    
                     
 
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
@@ -128,26 +142,34 @@ def main():
                      DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
         
         for key in game_keys: # collision testing for keys
-            if player.rect.colliderect(key.rect) and key.visible == True:
+            if player.hitbox.colliderect(key.rect) and key.visible == True:
                 key.visible = False
                 key.x, key.y = rand_xtile(), rand_ytile() 
                 key.rect.center = (key.x, key.y)
                 score += 1
                 if key == bkey:
                     skey.visible = True
+                    keys_left -= 1
+                    monster.vel += 1
                 elif key == skey:
                     gkey.visible = True
+                    keys_left -= 1
+                    monster.vel += 1
                 elif key == gkey:
-                    bkey.visible = True
+                    keys_left -= 1                    
                     monster.vel += 1 # ghost speeds up every 3 keys
         
-        if player.rect.colliderect(monster.rect): # collision testing for ghost
+        if player.hitbox.colliderect(monster.hitbox): # collision testing for ghost
             end_screen() # if ghost touches player - game over
+            # player loses a life
+            lives = lives - 1
         
-        if score > 0 and player.rect.colliderect(door_open_rect):
+        if keys_left == 0 and player.hitbox.colliderect(door_open_rect):
             game_win()
+            # Stop music if the player exits through the door
+            pygame.mixer.music.stop()
 
-        # dispaly all sprites on screen
+        # display all sprites on screen
         #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
         player.draw(DISPLAYSURFACE)
         bkey.draw(DISPLAYSURFACE)
@@ -160,6 +182,12 @@ def main():
         score_rect = score_text.get_rect()
         score_rect.topleft = (10, 10)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
+    
+        # code for displaying lives
+        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
+        life_rect = life_text.get_rect()
+        life_rect.topright = (DISPLAY_WIDTH-10, 10)
+        DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
@@ -176,8 +204,9 @@ def intro_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of all instructions, line by line
-    instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
-    instruct_start = HALF_DH * 7/8
+    instructions = ['Collect keys to escape...', 'Stay away from the monsters!', 'PRESS SPACEBAR TO PLAY', 'USE ARROW KEYS TO MOVE']
+
+    instruct_start = HALF_DH * 7/8 
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
         instruct_rect = instruct_text.get_rect()
