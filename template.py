@@ -61,8 +61,12 @@ def main():
     game_keys = [bkey,skey,gkey]
     
     score = 0
+    # variable to keep track of number of lives
+    lives = 3
+
     
     print(score)
+    print(lives)
     print()
 
     while True: # main game loop
@@ -144,6 +148,8 @@ def main():
         
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
+            # player loses a life
+            lives = lives - 1
         
         if score > 5 and player.rect.colliderect(door_open_rect):
             game_win()
@@ -163,6 +169,12 @@ def main():
         score_rect = score_text.get_rect()
         score_rect.topleft = (10, 10)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
+    
+        # code for displaying lives
+        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
+        life_rect = life_text.get_rect()
+        life_rect.topright = (DISPLAY_WIDTH-10, 10)
+        DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
