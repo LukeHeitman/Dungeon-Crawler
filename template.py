@@ -38,7 +38,7 @@ PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.p
 
 MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
-LEVELDICT = {'wall' : pygame.image.load('Assets/level/wall_mid.png'), 'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'),'door' : pygame.image.load('Assets/level/doors_leaf_closed.png'), 'floor' : [pygame.image.load('Assets/level/floor_1.png'), pygame.image.load('Assets/level/floor_2.png'), pygame.image.load('Assets/level/floor_3.png'), pygame.image.load('Assets/level/floor_4.png')], 'wall_top' : pygame.image.load('Assets/level/wall_top_mid.png'), 'side_wall_right' : pygame.image.load('Assets/level/wall_side_mid_left.png'), 'side_wall_left' : pygame.image.load('Assets/level/wall_side_mid_right.png')}
+LEVELDICT = {'wall' : pygame.image.load('Assets/level/wall_mid.png'), 'door' : pygame.image.load('Assets/level/doors_all.png'),'door_open' : [pygame.image.load('Assets/level/doors_leaf_open.png'),pygame.image.load('Assets/level/doors_frame_left.png'), pygame.image.load('Assets/level/doors_frame_righ.png'), pygame.image.load('Assets/level/doors_frame_top.png')], 'floor' : [pygame.image.load('Assets/level/floor_1.png'), pygame.image.load('Assets/level/floor_2.png'), pygame.image.load('Assets/level/floor_3.png'), pygame.image.load('Assets/level/floor_4.png')], 'wall_top' : pygame.image.load('Assets/level/wall_top_mid.png'), 'side_wall_right' : pygame.image.load('Assets/level/wall_side_mid_left.png'), 'side_wall_left' : pygame.image.load('Assets/level/wall_side_mid_right.png')}
 
 
 def main():
@@ -95,6 +95,38 @@ def main():
         player.rect.center = (player.x, player.y) #recenters player rect after movement
 
         monster.move_towards_player(player) # move ghost sprite towards player
+
+        DISPLAYSURFACE.fill(BLACK)
+        
+        for y in range(BLOCK_HEIGHT): # create level environment
+            for x in range(BLOCK_WIDTH):
+                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
+                if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
+                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
+                if y == 3:
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
+                    if score > 5:
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2+1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
+
+
+                    else:
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+
+                    if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
+                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                if y > 3:
+                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
+                    if x == 0:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
+                    if x == BLOCK_WIDTH - 1:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
         
         for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
@@ -112,28 +144,9 @@ def main():
         
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
-       
-        DISPLAYSURFACE.fill(BLACK)
         
-        for y in range(BLOCK_HEIGHT): # create level environment
-            for x in range(BLOCK_WIDTH):
-                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
-                if y == 2:
-                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
-                if y == 3:
-                    if (BLOCK_WIDTH/2 - 3) < x < (BLOCK_WIDTH/2 + 2):
-                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y-1) * BLOCK, TILE, TILE ))
-                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
-                    else:
-                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
-                if y > 3:
-                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
-                    if x == 0:
-                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
-                    if x == BLOCK_WIDTH - 1:
-                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
-                    
-                        
+        if score > 5 and player.rect.colliderect(door_open_rect):
+            game_win()
 
         # dispaly all sprites on screen
         #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
@@ -208,6 +221,38 @@ def end_screen():
 
     # Full list of information
     instructions = ['The ghost caught you before you could escape!', 'Press R to restart']
+    top_margin = HALF_DH * 7/8
+    for line in instructions:
+        instruct_text = BASICFONT.render(line, True, WHITE)
+        instruct_rect = instruct_text.get_rect()
+        instruct_rect.centerx = HALF_DW
+        instruct_rect.top = top_margin
+        top_margin += FONTSIZE + 10
+        DISPLAYSURFACE.blit(instruct_text, instruct_rect)
+
+    while True: # break out of intro screen with the space button
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                game_quit()
+            elif event.type == KEYDOWN:
+                if event.key == K_r:
+                    main()
+
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+def game_win():
+    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+
+    # Set up game over
+    title_font = pygame.font.Font(DEFAULTFONT, 60)
+    title_text = title_font.render('YOU WON', True, WHITE)
+    title_rect = title_text.get_rect()
+    title_rect.center = (HALF_DW, HALF_DH/4)
+    DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
+
+    # Full list of information
+    instructions = ['You collected all the keys and managed to escape!', 'Press R to replay']
     top_margin = HALF_DH * 7/8
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
