@@ -143,7 +143,6 @@ def main():
                 score += 1
                 if key == bkey:
                     skey.visible = True
-<<<<<<< HEAD
                     keys_left -= 1
                     monster.vel += 1
                 elif key == skey:
@@ -153,15 +152,6 @@ def main():
                 elif key == gkey:
                     keys_left -= 1                    
                     monster.vel += 1 # ghost speeds up every 3 keys
-=======
-                    monster.vel += 1
-                elif key == skey:
-                    gkey.visible = True
-                    monster.vel += 1
-                elif key == gkey:
-                    bkey.visible = True
-                    monster.vel += 1 
->>>>>>> jedits
         
         if player.hitbox.colliderect(monster.hitbox): # collision testing for ghost
             end_screen() # if ghost touches player - game over
