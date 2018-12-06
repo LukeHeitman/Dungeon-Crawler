@@ -41,6 +41,10 @@ def main():
     # load music and set it to play forever
     pygame.mixer.music.load('Assets/mariomusic.mp3')
     pygame.mixer.music.play(-1)
+
+    # loads a sound that will be played when the player collides with a key
+    keysound = pygame.mixer.Sound('Assets/keypickup.wav')
+
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -65,6 +69,7 @@ def main():
     score = 0
     # variable to keep track of number of lives
     lives = 3
+    level = 1
 
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
@@ -136,6 +141,7 @@ def main():
                 key.x, key.y = rand_xtile(), rand_ytile() 
                 key.rect.center = (key.x, key.y)
                 score += 1
+                keysound.play()
                 if key == bkey:
                     skey.visible = True
                     keys_left -= 1
