@@ -32,6 +32,7 @@ IMAGEDICT = {'player' : pygame.image.load('Assets/player.png'), 'bronzekey' : py
 
 PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.png'), pygame.image.load('Assets/player/knight_m_run_anim_f1.png'), pygame.image.load('Assets/player/knight_m_run_anim_f2.png'), pygame.image.load('Assets/player/knight_m_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/player/knight_m_run_anim_f4.png'), pygame.image.load('Assets/player/knight_m_run_anim_f5.png'), pygame.image.load('Assets/player/knight_m_run_anim_f6.png'), pygame.image.load('Assets/player/knight_m_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/player/knight_m_idle_anim_f0.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f1.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f2.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/player/knight_m_idle_anim_f4.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f5.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f6.png'), pygame.image.load('Assets/player/knight_m_idle_anim_f7.png')]}
 
+MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
 # code for adding music
 # music = pygame.mixer.music.load('music.mp3')
@@ -42,7 +43,7 @@ def main():
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
-
+   
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -55,7 +56,7 @@ def main():
 
     # initialize all movable sprites into the map
     player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
-    ghost = Enemy(IMAGEDICT['ghost'], DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
+    monster = Monster(MONSTERDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
     bkey = Key(IMAGEDICT['bronzekey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
@@ -71,6 +72,7 @@ def main():
 
         player.right = False
         player.left = False
+        
         keys = pygame.key.get_pressed() # handles key pressed events and moves player
         if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
             player.x += player.vel
@@ -86,10 +88,11 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - player.height:
             player.y += player.vel
+        
         player.rect.center = (player.x, player.y) #recenters player rect after movement
         
         
-        ghost.move_towards_player(player) # move ghost sprite towards player
+        monster.move_towards_player(player) # move ghost sprite towards player
         
         for key in game_keys: # collision testing for keys
             if player.rect.colliderect(key.rect) and key.visible == True:
@@ -104,9 +107,9 @@ def main():
                     gkey.visible = True
                 elif key == gkey:
                     bkey.visible = True
-                    ghost.vel += 1 # ghost speeds up every 3 keys
+                    monster.vel += 1 # ghost speeds up every 3 keys
         
-        if player.rect.colliderect(ghost.rect): # collision testing for ghost
+        if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
 
         # dispaly all sprites on screen
@@ -115,7 +118,7 @@ def main():
         bkey.draw(DISPLAYSURFACE)
         skey.draw(DISPLAYSURFACE)
         gkey.draw(DISPLAYSURFACE)
-        ghost.draw(DISPLAYSURFACE)
+        monster.draw(DISPLAYSURFACE)
 
         # test code for displaying score
         title_text = BASICFONT.render(str(score), True, WHITE)

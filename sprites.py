@@ -1,6 +1,6 @@
 import pygame
 import math
-pygame.init()
+
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, dict, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -8,8 +8,8 @@ class Sprite(pygame.sprite.Sprite):
         self.y = y
         self.vel = 5
         self.step = 0
-        self.left = False
-        self.right = False
+        self.dx = 0
+        self.dx = 0
         self.direc = 'Right'
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
@@ -34,14 +34,15 @@ class Sprite(pygame.sprite.Sprite):
             self.step += 1
         
 
-class Enemy(pygame.sprite.Sprite):
-    def __init__(self, image, x, y):
+class Monster(pygame.sprite.Sprite):
+    def __init__(self, dict, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.vel = 1
-        self.image = image
-        self.rect = self.image.get_rect()
+        self.step
+        self.image = dict
+        self.rect = self.image['IdleR'][0].get_rect()
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
     
@@ -54,6 +55,12 @@ class Enemy(pygame.sprite.Sprite):
         self.x += dx * self.vel
         self.y += dy * self.vel
         self.rect.center = (self.x, self.y)
+        if dx > 0:
+            self.direct = 'Right'
+        elif dx < 0:
+            self.direct = 'Left'
+        
+
 
 
     def draw(self, window):
