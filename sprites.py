@@ -40,7 +40,7 @@ class Monster(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.vel = 1
-        self.step
+        self.step = 0
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
         self.rect.center = (self.x, self.y)
@@ -48,23 +48,24 @@ class Monster(pygame.sprite.Sprite):
     
     def move_towards_player(self, player):
         # find normalized direction vector (dx, dy) between enemy and player
-        dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
-        dist = math.hypot(dx, dy)
-        dx, dy = dx / dist, dy / dist
+        self.dx, self.dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
+        dist = math.hypot(self.dx, self.dy)
+        self.dx, self.dy = self.dx / dist, self.dy / dist
         # move along this normalized vector towards the player at current speed
-        self.x += dx * self.vel
-        self.y += dy * self.vel
+        self.x += self.dx * self.vel
+        self.y += self.dy * self.vel
         self.rect.center = (self.x, self.y)
-        if dx > 0:
-            self.direct = 'Right'
-        elif dx < 0:
-            self.direct = 'Left'
-        
-
-
 
     def draw(self, window):
-        window.blit(self.image, (self.x, self.y))
+        if self.step > 15:
+            self.step = 0
+        if self.dx > 0:
+            window.blit(self.image['Right'][self.step // 5], (self.x, self.y))
+            self.step += 1
+        elif self.dx < 0:
+            window.blit(self.image['Right'][self.step // 5], (self.x, self.y))
+            self.step += 1
+
 
 class Key(pygame.sprite.Sprite):
     def __init__(self, image, x, y):
