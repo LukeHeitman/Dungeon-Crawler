@@ -13,7 +13,6 @@ class Sprite(pygame.sprite.Sprite):
         self.direc = 'Right'
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
-        self.rect = self.rect.inflate(-15, -15)
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
 
@@ -44,6 +43,7 @@ class Monster(pygame.sprite.Sprite):
         self.step = 0
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
+        self.rect = self.rect.inflate(-15, -15)
         self.rect.center = (self.x, self.y)
         self.width , self.height = self.rect.size
     

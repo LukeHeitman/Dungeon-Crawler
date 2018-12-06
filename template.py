@@ -97,8 +97,9 @@ def main():
                 if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
-                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
-                    if score > 1:
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                    pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
+                    if score > 0:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -106,12 +107,14 @@ def main():
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
+                        door_open_rect.fill(WHITE)
+                        #door_open_rect.inflate(-35, -35)
 
 
                     else:
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
-                    door_open_rect.inflate(-30, -30)
+                    
 
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
                         DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
@@ -141,7 +144,7 @@ def main():
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
         
-        if score > 1 and player.rect.colliderect(door_open_rect):
+        if score > 0 and player.rect.colliderect(door_open_rect):
             game_win()
 
         # dispaly all sprites on screen
