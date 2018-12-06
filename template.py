@@ -98,7 +98,7 @@ def main():
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
-                    pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
+                    #pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
                     if score > 0:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
@@ -107,7 +107,7 @@ def main():
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
-                        door_open_rect.fill(WHITE)
+                        #door_open_rect.fill(WHITE)
                         #door_open_rect.inflate(-35, -35)
 
 
