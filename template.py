@@ -34,8 +34,6 @@ PLAYERDICT = {'Right' : [pygame.image.load('Assets/player/knight_m_run_anim_f0.p
 
 MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f3.png')], 'Left' : [pygame.image.load('Assets/monster/big_demon_run_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_run_anim_f7.png')], 'IdleR' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f0.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f1.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f2.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f3.png')], 'IdleL' : [pygame.image.load('Assets/monster/big_demon_idle_anim_f4.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f5.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f6.png'), pygame.image.load('Assets/monster/big_demon_idle_anim_f7.png')]}
 
-SCORE = 0
-LEVEL = 0
 
 def main():
     global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
@@ -62,6 +60,9 @@ def main():
     gkey = Key(IMAGEDICT['goldkey'], rand_tile(TILE_WIDTH), rand_tile(TILE_HEIGHT))
     game_keys = [bkey,skey,gkey]
     
+    score = 0
+    level = 0
+
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
             if event.type == QUIT:
@@ -95,7 +96,7 @@ def main():
                 key.x = rand_tile(TILE_WIDTH) 
                 key.y = rand_tile(TILE_HEIGHT) 
                 key.rect.center = (key.x, key.y)
-                SCORE += 1
+                score += 1
                 if key == bkey:
                     skey.visible = True
                 elif key == skey:
@@ -116,11 +117,10 @@ def main():
         monster.draw(DISPLAYSURFACE)
 
         # test code for displaying score
-        score_text = BASICFONT.render(str(SCORE), True, WHITE)
+        score_text = BASICFONT.render(str(score), True, WHITE)
         score_rect = score_text.get_rect()
         score_rect.center = (32, 32)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
-
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
