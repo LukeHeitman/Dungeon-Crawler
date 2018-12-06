@@ -1,5 +1,5 @@
 # Dungeon Crawler
-# By Luke Heitman & Jckson Enright
+# By Luke Heitman & Jackson Enright
 # https://github.com/LukeHeitman/Dungeon-Crawler.git
 
 import pygame
@@ -98,7 +98,7 @@ def main():
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
-                    if score > 5:
+                    if score > 1:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -111,6 +111,7 @@ def main():
                     else:
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+                    door_open_rect.inflate(-30, -30)
 
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
                         DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
@@ -140,7 +141,7 @@ def main():
         if player.rect.colliderect(monster.rect): # collision testing for ghost
             end_screen() # if ghost touches player - game over
         
-        if score > 5 and player.rect.colliderect(door_open_rect):
+        if score > 1 and player.rect.colliderect(door_open_rect):
             game_win()
 
         # dispaly all sprites on screen
