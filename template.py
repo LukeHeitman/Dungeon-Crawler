@@ -53,7 +53,7 @@ def main():
 
     # initialize all movable sprites into the map
     player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
-    monster = Monster(MONSTERDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
+    monster = Monster(DEMONDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
 
     # initialize keys randomly around the map
     bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
@@ -102,14 +102,8 @@ def main():
                 if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
-<<<<<<< HEAD
-                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
-                    #pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
-                    if score > 0:
-=======
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
                     if keys_left == 0:
->>>>>>> cb0a3e7d8466c8f6e11146b648e91f8f081f9252
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -117,11 +111,6 @@ def main():
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
-<<<<<<< HEAD
-                        #door_open_rect.fill(WHITE)
-                        #door_open_rect.inflate(-35, -35)
-=======
->>>>>>> cb0a3e7d8466c8f6e11146b648e91f8f081f9252
 
 
                     else:
