@@ -37,10 +37,6 @@ MONSTERDICT = {'Right' : [pygame.image.load('Assets/monster/big_demon_run_anim_f
 SCORE = 0
 LEVEL = 0
 
-# code for adding music
-# music = pygame.mixer.music.load('music.mp3')
-# pygame.mixer.music.play(-1)
-
 def main():
     global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
 
