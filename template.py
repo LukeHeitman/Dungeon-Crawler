@@ -191,8 +191,9 @@ def intro_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of all instructions, line by line
-    instructions = ['Press Spacebar to Play', 'Use arrow keys to move']
-    instruct_start = HALF_DH * 7/8
+    instructions = ['Collect keys to escape...', 'Stay away from the monsters!', 'PRESS SPACEBAR TO PLAY', 'USE ARROW KEYS TO MOVE']
+
+    instruct_start = HALF_DH * 7/8 
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
         instruct_rect = instruct_text.get_rect()
