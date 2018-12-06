@@ -85,7 +85,8 @@ def main():
             player.y -= player.vel
         if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
             player.y += player.vel
-        player.rect.center = (player.x, player.y) #recenters player rect after movement
+        player.rect.topleft = (player.x, player.y)
+        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
 
         monster.move_towards_player(player) # move ghost sprite towards player
 
@@ -97,8 +98,7 @@ def main():
                 if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
-                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
-                    pygame.draw.rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))             
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
                     if score > 0:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
@@ -107,13 +107,12 @@ def main():
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
-                        door_open_rect.fill(WHITE)
-                        #door_open_rect.inflate(-35, -35)
 
 
                     else:
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+                    door_open_hitbox = door_open_rect.inflate(-20, -20)    
                     
 
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
@@ -141,7 +140,7 @@ def main():
                     bkey.visible = True
                     monster.vel += 1 # ghost speeds up every 3 keys
         
-        if player.rect.colliderect(monster.rect): # collision testing for ghost
+        if player.rect.colliderect(monster.hitbox): # collision testing for ghost
             end_screen() # if ghost touches player - game over
         
         if score > 0 and player.rect.colliderect(door_open_rect):
