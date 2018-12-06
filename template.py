@@ -66,11 +66,6 @@ def main():
     # variable to keep track of number of lives
     lives = 3
 
-    
-    print(score)
-    print(lives)
-    print()
-
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
             if event.type == QUIT:
@@ -108,7 +103,7 @@ def main():
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
-                    if score > 0:
+                    if keys_left == 0:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -158,7 +153,7 @@ def main():
             # player loses a life
             lives = lives - 1
         
-        if score > 0 and player.hitbox.colliderect(door_open_rect):
+        if keys_left == 0 and player.hitbox.colliderect(door_open_rect):
             game_win()
             # Stop music if the player exits through the door
             pygame.mixer.music.stop()
