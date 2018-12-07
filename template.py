@@ -141,10 +141,6 @@ def game_loop(level, lives): # main game loop with current level and lives
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
                     door_open_rect = pygame.Rect((HALF_DW-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE )) # set rect for open door outside conditional       
-<<<<<<< HEAD
-=======
-                    DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect) # shrinks door hitbox size
->>>>>>> 213f4018e0ab002ad501228e8833f82822e649a9
                     if keys == 0: # creates open door if collected all keys
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect) 
                         door_rect = pygame.Rect((HALF_DW-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
@@ -155,10 +151,7 @@ def game_loop(level, lives): # main game loop with current level and lives
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
                     else: # spawn closed door 
                         door_rect = pygame.Rect((HALF_DW-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
-<<<<<<< HEAD
                         DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect) # shrinks door hitbox size
-=======
->>>>>>> 213f4018e0ab002ad501228e8833f82822e649a9
                     door_open_hitbox = door_open_rect.inflate(-20, -20) #  
                     if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
                         DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
@@ -192,12 +185,7 @@ def game_loop(level, lives): # main game loop with current level and lives
         player.rect.topleft = (player.x, player.y) # recenter player rect after movement
         player.hitbox = player.rect.inflate(-15, -15) # recenter player hitbox
 
-<<<<<<< HEAD
         
-=======
-        for monster in monsters: # move all monsters toward player
-            monster.move_towards_player(player)
->>>>>>> 213f4018e0ab002ad501228e8833f82822e649a9
 
         for key in game_keys: # collision testing for keys
             if player.hitbox.colliderect(key.rect) and key.visible == True: # tests if player collides with key
@@ -218,12 +206,9 @@ def game_loop(level, lives): # main game loop with current level and lives
                 elif key == gkey:
                     keys -= 1                    
                     demon.vel += 1 
-<<<<<<< HEAD
 
         for monster in monsters: # move all monsters toward player
             monster.move_towards_player(player)
-=======
->>>>>>> 213f4018e0ab002ad501228e8833f82822e649a9
 
         for monster in monsters: # collision test for each monster
             if monster.visible == True and monster.hitbox.colliderect(player.hitbox): # collision testing for ghost
