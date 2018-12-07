@@ -1,3 +1,4 @@
+# file of all image dictionaries for level environment and sprite animation
 import pygame
 KEYDICT = {'bronzekey' : pygame.image.load('Assets/bronzekey.png'), 'silverkey' : pygame.image.load('Assets/silverkey.png'),'goldkey' : pygame.image.load('Assets/goldkey.png')}
 
