@@ -39,7 +39,7 @@ def main():
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
-   
+
     # load music and set it to play forever
     pygame.mixer.music.load('Assets/mariomusic.mp3')
     pygame.mixer.music.play(-1) # loads a sound that will be played when the player collides with a key
@@ -52,7 +52,7 @@ def main():
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
     intro_screen() # Begin game with intro screen
-    
+
     level = 1
     lives = 3
     game_loop(level, lives)
@@ -94,8 +94,8 @@ def intro_screen():
 
 def game_loop(level, lives):
     player = Player(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
-    
-    demon = Monster(DEMONDICT, rand_xtile(), rand_ytile(), 2)
+
+    demon = Monster(DEMONDICT, rand_xtile(), rand_ytile(), 1)
     demon.visible = True
     ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
@@ -105,7 +105,7 @@ def game_loop(level, lives):
     monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
-    
+
     if level > 1:
         for skeleton in skeletons:
             skeleton.visible = True
@@ -158,7 +158,7 @@ def game_loop(level, lives):
                     if x == BLOCK_WIDTH - 1:
                         DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
                 if y == BLOCK_HEIGHT - 1:
-                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                    DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
 
 
         player.right = False
