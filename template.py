@@ -104,9 +104,10 @@ def game_loop(level, lives):
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
     
+   
     if level > 1:
         for skeleton in skeletons:
-            skeleton.visible == True
+            skeleton.visible = True
 
     # initialize keys randomly around the map
     bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
