@@ -95,13 +95,14 @@ def intro_screen():
 def game_loop(level, lives):
     player = Player(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
     
-    demon = Monster(DEMONDICT, rand_xtile(), rand_ytile(), 2)
+    
+    demon = Monster(DEMONDICT, HALF_DW, HALF_DH + 200, 2)
     demon.visible = True
     ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre3 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
-    skeleton1 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
-    skeleton2 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
+    skeleton1 = Monster(SKELETONDICT, HALF_DW - 100, HALF_DH, 3)
+    skeleton2 = Monster(SKELETONDICT, HALF_DW + 100, HALF_DH, 3)
     monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
