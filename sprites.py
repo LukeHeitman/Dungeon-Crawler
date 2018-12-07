@@ -1,7 +1,7 @@
 import pygame
 import math
 
-class Sprite(pygame.sprite.Sprite):
+class Player(pygame.sprite.Sprite):
     def __init__(self, dict, x, y):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
@@ -36,12 +36,12 @@ class Sprite(pygame.sprite.Sprite):
 
 
 class Monster(pygame.sprite.Sprite):
-    def __init__(self, dict, x, y):
+    def __init__(self, dict, x, y, vel):
         pygame.sprite.Sprite.__init__(self)
         self.x = x
         self.y = y
         self.visible = False
-        self.vel = 1
+        self.vel = vel
         self.step = 0
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
