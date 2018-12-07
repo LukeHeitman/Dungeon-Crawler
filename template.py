@@ -189,11 +189,7 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
-<<<<<<< HEAD
-                #KEYSOUND.play()
-=======
                 #keysound.play()
->>>>>>> 0b85ac9ff64b41fb444de3355a7622c31fc94fb1
 
                 if key == bkey:
                     skey.visible = True
@@ -205,7 +201,7 @@ def game_loop(level, lives):
                     demon.vel += 1
                 elif key == gkey:
                     keys -= 1                    
-                    demon.vel += 1 # ghost speeds up every 3 keys
+                    demon.vel += 1 # demon speeds up every 3 keys
         
         for monster in monsters:
             monster.move_towards_player(player)
