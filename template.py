@@ -118,14 +118,7 @@ def game_loop(level, lives):
     gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
     game_keys = [bkey, skey, gkey]
     
-<<<<<<< HEAD
-    score = 0
-    # variable to keep track of number of lives
-    lives = 3
-    level = 1
-=======
     keys = 3
->>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
 
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
@@ -135,31 +128,6 @@ def game_loop(level, lives):
                 if event.key == K_r:
                     main()
 
-<<<<<<< HEAD
-        player.right = False
-        player.left = False
-        
-        keys = pygame.key.get_pressed() # handles key pressed events and moves player
-        if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
-            player.x += player.vel
-            player.right = True
-            player.left = False
-            player.direc = 'Right'
-        if keys[pygame.K_LEFT] and player.x > player.vel:
-            player.x -= player.vel
-            player.right = False
-            player.left = True
-            player.direc = 'Left'
-        if keys[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
-            player.y -= player.vel
-        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
-            player.y += player.vel
-        player.rect.topleft = (player.x, player.y)
-        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
-
-        monster.move_towards_player(player) # move monster sprite towards player
-=======
->>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
 
         DISPLAYSURFACE.fill(BLACK)
         for y in range(BLOCK_HEIGHT): # create level environment
@@ -219,11 +187,8 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
-<<<<<<< HEAD
-                score += 1
                 keysound.play()
-=======
->>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
+
                 if key == bkey:
                     skey.visible = True
                     keys -= 1
@@ -233,16 +198,6 @@ def game_loop(level, lives):
                     keys -= 1
                     demon.vel += 1
                 elif key == gkey:
-<<<<<<< HEAD
-                    keys_left -= 1                    
-                    monster.vel += 1 # monster speeds up every 3 keys
-        
-        if player.hitbox.colliderect(monster.hitbox): # collision testing for monster
-            end_screen() # if monster touches player - game over
-            # player loses a life
-            lives = lives - 1
-            
-=======
                     keys -= 1                    
                     demon.vel += 1 # ghost speeds up every 3 keys
         
@@ -256,7 +211,6 @@ def game_loop(level, lives):
                     game_loop(level, lives)
                 else:
                     end_screen() # if ghost touches player - game over
->>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
         
         if keys == 0 and player.hitbox.colliderect(door_open_rect):
             level += 1
