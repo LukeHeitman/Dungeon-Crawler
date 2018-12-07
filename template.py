@@ -32,8 +32,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
+
+
 def main():
-    global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT
+    global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, LEVEL, LIVES, KEYS
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
@@ -50,146 +52,16 @@ def main():
     FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
-    keys_left = 3
-
     intro_screen() # Begin game with intro screen
-
-    # initialize all movable sprites into the map
-    player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2)
-    monster = Monster(DEMONDICT, DISPLAY_WIDTH/4, DISPLAY_HEIGHT/4)
-
-    # initialize keys randomly around the map
-    bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
-    bkey.visible = True # make first key visible
-    skey = Key(KEYDICT['silverkey'], rand_xtile(), rand_ytile())
-    gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
-    game_keys = [bkey,skey,gkey]
     
-    score = 0
-    # variable to keep track of number of lives
-    lives = 3
     level = 1
-
-    while True: # main game loop
-        for event in pygame.event.get(): # exits game if user clicks X
-            if event.type == QUIT:
-                game_quit()
-
-        player.right = False
-        player.left = False
-        
-        keys = pygame.key.get_pressed() # handles key pressed events and moves player
-        if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
-            player.x += player.vel
-            player.right = True
-            player.left = False
-            player.direc = 'Right'
-        if keys[pygame.K_LEFT] and player.x > player.vel:
-            player.x -= player.vel
-            player.right = False
-            player.left = True
-            player.direc = 'Left'
-        if keys[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
-            player.y -= player.vel
-        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
-            player.y += player.vel
-        player.rect.topleft = (player.x, player.y)
-        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
-
-        monster.move_towards_player(player) # move monster sprite towards player
-
-        DISPLAYSURFACE.fill(BLACK)
-        
-        for y in range(BLOCK_HEIGHT): # create level environment
-            for x in range(BLOCK_WIDTH):
-                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
-                if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
-                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
-                if y == 3:
-                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
-                    if keys_left == 0:
-                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
-                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
-                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
-                        door_rect = pygame.Rect((DISPLAY_WIDTH/2+1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
-                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
-                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
-                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
-
-
-                    else:
-                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
-                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
-                    door_open_hitbox = door_open_rect.inflate(-20, -20)    
-                    
-
-                    if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
-                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
-                if 3 < y < BLOCK_HEIGHT - 1:
-                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
-                    if x == 0:
-                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
-                    if x == BLOCK_WIDTH - 1:
-                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
-                if y == BLOCK_HEIGHT - 1:
-                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
-        
-        for key in game_keys: # collision testing for keys
-            if player.hitbox.colliderect(key.rect) and key.visible == True:
-                key.visible = False
-                key.x, key.y = rand_xtile(), rand_ytile() 
-                key.rect.center = (key.x, key.y)
-                score += 1
-                keysound.play()
-                if key == bkey:
-                    skey.visible = True
-                    keys_left -= 1
-                    monster.vel += 1
-                elif key == skey:
-                    gkey.visible = True
-                    keys_left -= 1
-                    monster.vel += 1
-                elif key == gkey:
-                    keys_left -= 1                    
-                    monster.vel += 1 # monster speeds up every 3 keys
-        
-        if player.hitbox.colliderect(monster.hitbox): # collision testing for monster
-            end_screen() # if monster touches player - game over
-            # player loses a life
-            lives = lives - 1
-            
-        
-        if keys_left == 0 and player.hitbox.colliderect(door_open_rect):
-            game_win()
-            # Stop music if the player exits through the door
-            pygame.mixer.music.stop()
-
-        # display all sprites on screen
-        #DISPLAYSURFACE.blit(IMAGEDICT['bg'], (0, 0)) # background image
-        player.draw(DISPLAYSURFACE)
-        bkey.draw(DISPLAYSURFACE)
-        skey.draw(DISPLAYSURFACE)
-        gkey.draw(DISPLAYSURFACE)
-        monster.draw(DISPLAYSURFACE)
-
-        # test code for displaying score
-        score_text = BASICFONT.render('Score:  ' + str(score), True, WHITE)
-        score_rect = score_text.get_rect()
-        score_rect.topleft = (10, 10)
-        DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
-    
-        # code for displaying lives
-        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
-        life_rect = life_text.get_rect()
-        life_rect.topright = (DISPLAY_WIDTH-10, 10)
-        DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
-        pygame.display.update()
-        FPSCLOCK.tick(FPS)
+    lives = 3
+    game_loop(level, lives)
 
     game_quit()
 
 def intro_screen():
-    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+    DISPLAYSURFACE.fill(BLACK)
 
     # Set up title
     title_font = pygame.font.Font(DEFAULTFONT, 60)
@@ -218,6 +90,203 @@ def intro_screen():
                 if event.key == K_SPACE:
                     return
 
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+def game_loop(level, lives):
+    player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
+    
+    demon = Monster(DEMONDICT, rand_xtile(), rand_ytile())
+    demon.visible = True
+    ogre1 = Monster(OGREDICT, rand_xtile(), rand_ytile())
+    ogre2 = Monster(OGREDICT, rand_xtile(), rand_ytile())
+    ogre3 = Monster(OGREDICT, rand_xtile(), rand_ytile())
+    skeleton1 = Monster(SKELETONDICT, rand_xtile(), rand_ytile())
+    skeleton2 = Monster(SKELETONDICT, rand_xtile(), rand_ytile())
+    monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
+    ogres = [ogre1, ogre2, ogre3]
+    skeletons = [skeleton1, skeleton2]
+    
+    if level > 1:
+        for skeleton in skeletons:
+            skeleton.visible == True
+
+    # initialize keys randomly around the map
+    bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
+    bkey.visible = True # make first key visible
+    skey = Key(KEYDICT['silverkey'], rand_xtile(), rand_ytile())
+    gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
+    game_keys = [bkey, skey, gkey]
+    
+<<<<<<< HEAD
+    score = 0
+    # variable to keep track of number of lives
+    lives = 3
+    level = 1
+=======
+    keys = 3
+>>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
+
+    while True: # main game loop
+        for event in pygame.event.get(): # exits game if user clicks X
+            if event.type == QUIT:
+                game_quit()
+            elif event.type == KEYDOWN:
+                if event.key == K_r:
+                    main()
+
+<<<<<<< HEAD
+        player.right = False
+        player.left = False
+        
+        keys = pygame.key.get_pressed() # handles key pressed events and moves player
+        if keys[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
+            player.x += player.vel
+            player.right = True
+            player.left = False
+            player.direc = 'Right'
+        if keys[pygame.K_LEFT] and player.x > player.vel:
+            player.x -= player.vel
+            player.right = False
+            player.left = True
+            player.direc = 'Left'
+        if keys[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
+            player.y -= player.vel
+        if keys[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
+            player.y += player.vel
+        player.rect.topleft = (player.x, player.y)
+        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
+
+        monster.move_towards_player(player) # move monster sprite towards player
+=======
+>>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
+
+        DISPLAYSURFACE.fill(BLACK)
+        for y in range(BLOCK_HEIGHT): # create level environment
+            for x in range(BLOCK_WIDTH):
+                block_rect = pygame.Rect((x * BLOCK, y * BLOCK, BLOCK, BLOCK))
+                if y == 2 and not (BLOCK_WIDTH/2 - 2) < x < (BLOCK_WIDTH/2 + 1):
+                    DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
+                if y == 3:
+                    door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
+                    if keys == 0:
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2+1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][2], door_rect)
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door_open'][3], door_rect)
+                    else:
+                        door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK - 3, TILE, TILE ))
+                        DISPLAYSURFACE.blit(LEVELDICT['door'], door_rect)
+                    door_open_hitbox = door_open_rect.inflate(-20, -20)    
+                    if x < (BLOCK_WIDTH/2 - 1) or x > (BLOCK_WIDTH/2):
+                        DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                if 3 < y < BLOCK_HEIGHT - 1:
+                    DISPLAYSURFACE.blit(LEVELDICT['floor'][(x + y) % 3], block_rect)
+                    if x == 0:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_left'], block_rect)
+                    if x == BLOCK_WIDTH - 1:
+                        DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
+                if y == BLOCK_HEIGHT - 1:
+                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+
+
+        player.right = False
+        player.left = False        
+        inputs = pygame.key.get_pressed() # handles key pressed events and moves player
+        if inputs[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
+            player.x += player.vel
+            player.right = True
+            player.left = False
+            player.direc = 'Right'
+        if inputs[pygame.K_LEFT] and player.x > player.vel:
+            player.x -= player.vel
+            player.right = False
+            player.left = True
+            player.direc = 'Left'
+        if inputs[pygame.K_UP] and player.y > player.vel + BLOCK * 2:
+            player.y -= player.vel
+        if inputs[pygame.K_DOWN] and player.y < DISPLAY_HEIGHT - BLOCK * 1.5 - player.height:
+            player.y += player.vel
+        player.rect.topleft = (player.x, player.y)
+        player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
+
+        for key in game_keys: # collision testing for keys
+            if player.hitbox.colliderect(key.rect) and key.visible == True:
+                if level == 3:
+                    ogres[keys - 1].visible = True
+                key.visible = False
+                key.rect.center = (key.x, key.y)
+<<<<<<< HEAD
+                score += 1
+                keysound.play()
+=======
+>>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
+                if key == bkey:
+                    skey.visible = True
+                    keys -= 1
+                    demon.vel += 1
+                elif key == skey:
+                    gkey.visible = True
+                    keys -= 1
+                    demon.vel += 1
+                elif key == gkey:
+<<<<<<< HEAD
+                    keys_left -= 1                    
+                    monster.vel += 1 # monster speeds up every 3 keys
+        
+        if player.hitbox.colliderect(monster.hitbox): # collision testing for monster
+            end_screen() # if monster touches player - game over
+            # player loses a life
+            lives = lives - 1
+            
+=======
+                    keys -= 1                    
+                    demon.vel += 1 # ghost speeds up every 3 keys
+        
+        for monster in monsters:
+            monster.move_towards_player(player)
+
+        for monster in monsters:
+            if monster.visible == True and monster.hitbox.colliderect(player.hitbox): # collision testing for ghost
+                lives = lives - 1 # player loses a life
+                if lives > 0:                    
+                    game_loop(level, lives)
+                else:
+                    end_screen() # if ghost touches player - game over
+>>>>>>> 75fc1ace1970fa40a4a556fb050764efd1eccfba
+        
+        if keys == 0 and player.hitbox.colliderect(door_open_rect):
+            level += 1
+            if level > 3:
+                pygame.mixer.music.stop() # Stop music if the player exits through the door
+                game_win()
+            else:
+                game_loop(level, lives)
+             
+        player.draw(DISPLAYSURFACE)
+
+        for monster in monsters:
+            monster.draw(DISPLAYSURFACE)
+
+        for key in game_keys:
+            key.draw(DISPLAYSURFACE)
+
+
+
+        # test code for displaying score
+        score_text = BASICFONT.render('Level:  ' + str(level), True, WHITE)
+        score_rect = score_text.get_rect()
+        score_rect.topleft = (10, 10)
+        DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
+    
+        # code for displaying lives
+        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
+        life_rect = life_text.get_rect()
+        life_rect.topright = (DISPLAY_WIDTH-10, 10)
+        DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
