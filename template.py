@@ -96,7 +96,7 @@ def main():
         player.rect.topleft = (player.x, player.y)
         player.hitbox = player.rect.inflate(-15, -15) #recenters player rect after movement
 
-        monster.move_towards_player(player) # move ghost sprite towards player
+        monster.move_towards_player(player) # move monster sprite towards player
 
         DISPLAYSURFACE.fill(BLACK)
         
@@ -151,10 +151,10 @@ def main():
                     monster.vel += 1
                 elif key == gkey:
                     keys_left -= 1                    
-                    monster.vel += 1 # ghost speeds up every 3 keys
+                    monster.vel += 1 # monster speeds up every 3 keys
         
-        if player.hitbox.colliderect(monster.hitbox): # collision testing for ghost
-            end_screen() # if ghost touches player - game over
+        if player.hitbox.colliderect(monster.hitbox): # collision testing for monster
+            end_screen() # if monster touches player - game over
             # player loses a life
             lives = lives - 1
             
@@ -243,7 +243,7 @@ def end_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of information
-    instructions = ['The ghost caught you before you could escape!', 'Press R to restart']
+    instructions = ['A monster caught you before you could escape!', 'Press R to restart']
     top_margin = HALF_DH * 7/8
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
