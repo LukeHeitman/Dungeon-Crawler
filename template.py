@@ -101,13 +101,8 @@ def game_loop(level, lives):
     ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre3 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
-<<<<<<< HEAD
     skeleton1 = Monster(SKELETONDICT, HALF_DW - 225, HALF_DH, 3)
     skeleton2 = Monster(SKELETONDICT, HALF_DW + 225, HALF_DH, 3)
-=======
-    skeleton1 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
-    skeleton2 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
->>>>>>> 6716fc7c8276364040162b00d22276aeabcac897
     monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
