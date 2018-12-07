@@ -27,8 +27,6 @@ BLOCK_WIDTH = int(DISPLAY_WIDTH//BLOCK)
 BLOCK_HEIGHT = int(DISPLAY_HEIGHT//BLOCK)
 TOP_MARGIN = 2
 
-#KEY_SOUND = pygame.mixer.Sound('Assets/keypickup.wav')
-
  #color constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -45,7 +43,6 @@ def main():
     # load music and set it to play forever
     pygame.mixer.music.load('Assets/mariomusic.mp3')
     pygame.mixer.music.play(-1) # loads a sound that will be played when the player collides with a key
-    
 
 
     # initialization of display surface and font
@@ -119,6 +116,7 @@ def game_loop(level, lives):
     skey = Key(KEYDICT['silverkey'], rand_xtile(), rand_ytile())
     gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
     game_keys = [bkey, skey, gkey]
+    key_sound = pygame.mixer.Sound('Assets/keypickup.wav')
     
     keys = 3
 
@@ -189,7 +187,7 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
-                #KEYSOUND.play()
+                key_sound.play()
 
                 if key == bkey:
                     skey.visible = True
@@ -218,7 +216,8 @@ def game_loop(level, lives):
             level += 1
             if level > 3:
                 pygame.mixer.music.stop() # Stop music if the player exits through the door
-                game_win()
+                seconds = pygame.time.get_ticks() // 1000
+                game_win(seconds)
             else:
                 game_loop(level, lives)
              
@@ -289,7 +288,7 @@ def end_screen():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-def game_win():
+def game_win(seconds):
 
     DISPLAYSURFACE.fill(BLACK) 
 
@@ -301,7 +300,7 @@ def game_win():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of information
-    instructions = ['You collected all the keys and managed to escape!', 'Press R to replay']
+    instructions = ['You took ' + str(seconds) + ' seconds!', 'You collected all the keys and managed to escape!', 'Press R to replay']
     top_margin = HALF_DH * 7/8
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
