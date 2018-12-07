@@ -43,6 +43,9 @@ def main():
     # load music and set it to play forever
     pygame.mixer.music.load('Assets/mariomusic.mp3')
     pygame.mixer.music.play(-1)
+
+    # loads a sound that will be played when the player collides with a key
+    keysound = pygame.mixer.Sound('Assets/keypickup.wav')
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -185,6 +188,8 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
+                keysound.play()
+
                 if key == bkey:
                     skey.visible = True
                     keys -= 1
@@ -262,7 +267,7 @@ def end_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of information
-    instructions = ['The ghost caught you before you could escape!', 'Press R to restart']
+    instructions = ['A monster caught you before you could escape!', 'Press R to restart']
     top_margin = HALF_DH * 7/8
     for line in instructions:
         instruct_text = BASICFONT.render(line, True, WHITE)
@@ -285,7 +290,7 @@ def end_screen():
 
 def game_win():
 
-    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+    DISPLAYSURFACE.fill(BLACK) 
 
     # Set up game over
     title_font = pygame.font.Font(DEFAULTFONT, 60)
