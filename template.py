@@ -44,7 +44,6 @@ def main():
 
     # loads a sound that will be played when the player collides with a key
     keysound = pygame.mixer.Sound('Assets/keypickup.wav')
-
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -158,6 +157,7 @@ def main():
             end_screen() # if ghost touches player - game over
             # player loses a life
             lives = lives - 1
+            
         
         if keys_left == 0 and player.hitbox.colliderect(door_open_rect):
             game_win()
