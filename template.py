@@ -94,17 +94,18 @@ def intro_screen():
 
 def game_loop(level, lives):
     player = Player(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
-    demon = Monster(DEMONDICT, HALF_DW, HALF_DH + 200, 2)
+
+    demon = Monster(DEMONDICT, rand_xtile(), rand_ytile(), 1)
     demon.visible = True
     ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
     ogre3 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30, 1)
-    skeleton1 = Monster(SKELETONDICT, HALF_DW - 100, HALF_DH, 3)
-    skeleton2 = Monster(SKELETONDICT, HALF_DW + 100, HALF_DH, 3)
+    skeleton1 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
+    skeleton2 = Monster(SKELETONDICT, rand_xtile(), rand_ytile(), 3)
     monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
-
+    
     if level > 1:
         for skeleton in skeletons:
             skeleton.visible = True
@@ -157,7 +158,7 @@ def game_loop(level, lives):
                     if x == BLOCK_WIDTH - 1:
                         DISPLAYSURFACE.blit(LEVELDICT['side_wall_right'], block_rect)
                 if y == BLOCK_HEIGHT - 1:
-                    DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
+                     DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
 
 
         player.right = False
@@ -198,7 +199,7 @@ def game_loop(level, lives):
                     demon.vel += 1
                 elif key == gkey:
                     keys -= 1                    
-                    demon.vel += 1 # demon speeds up every 3 keys
+                    demon.vel += 1 # ghost speeds up every 3 keys
         
         for monster in monsters:
             monster.move_towards_player(player)
