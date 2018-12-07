@@ -1,3 +1,4 @@
+# list of classes for player sprites
 import pygame
 import math
 
@@ -14,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.image = dict
         self.rect = self.image['IdleR'][0].get_rect()
         self.rect.topleft = (self.x, self.y)
-        self.hitbox = self.rect.inflate(-10, -10)
+        self.hitbox = self.rect.inflate(-15, -15)
         self.width , self.height = self.rect.size
 
 
@@ -48,6 +49,7 @@ class Monster(pygame.sprite.Sprite):
         self.rect.topleft = (self.x, self.y)
         self.width , self.height = self.rect.size
 
+
     def move_towards_player(self, player):
         # find normalized direction vector (dx, dy) between enemy and player
         if self.visible == True:
@@ -59,6 +61,7 @@ class Monster(pygame.sprite.Sprite):
             self.y += self.dy * self.vel
             self.rect.topleft = (self.x, self.y)
             self.hitbox = self.rect.inflate(-10, -10)
+
 
     def draw(self, window):
         if self.visible == True:
