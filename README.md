@@ -5,7 +5,7 @@ CS50 Final Project
 Documentation for your project in the form of a Markdown file called README.md. This documentation is to be a user’s manual for your project. Though the structure of your documentation is entirely up to you, it should be incredibly clear to the staff how and where, if applicable, to compile, configure, and use your project. Your documentation should be at least several paragraphs in length. It should not be necessary for us to contact you with questions regarding your project after its submission. Hold our hand with this documentation; be sure to answer in your documentation any questions that you think we might have while testing your work.
 
 
-We constructed a ‘pygame’ game in python that we called Dungeon Crawler. We were unable to use a Graphical User Interface in the CS50 IDE so we downloaded Visual Studio Code on our computers and set up a shared repository on Github to collaborate on our code. 
+The point of our project was to create a 2D video game only using python, with the help of a Free and Open-Source library called Pygame. We used this library a ‘pygame’ game in python that we called Dungeon Crawler. We were unable to use a Graphical User Interface in the CS50 IDE so we downloaded Visual Studio Code on our computers and set up a shared repository on Github to collaborate on our code. 
 List of executables:
 To download Visual Studio Code, access this link: https://code.visualstudio.com/download and choose the correct version for your computer. 
 You will need to set up a Python interpreter in your Visual Studio code: 
