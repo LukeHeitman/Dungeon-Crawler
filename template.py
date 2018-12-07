@@ -27,6 +27,8 @@ BLOCK_WIDTH = int(DISPLAY_WIDTH//BLOCK)
 BLOCK_HEIGHT = int(DISPLAY_HEIGHT//BLOCK)
 TOP_MARGIN = 2
 
+#KEY_SOUND = pygame.mixer.Sound('Assets/keypickup.wav')
+
  #color constants
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -42,10 +44,10 @@ def main():
    
     # load music and set it to play forever
     pygame.mixer.music.load('Assets/mariomusic.mp3')
-    pygame.mixer.music.play(-1)
+    pygame.mixer.music.play(-1) # loads a sound that will be played when the player collides with a key
+    
 
-    # loads a sound that will be played when the player collides with a key
-    keysound = pygame.mixer.Sound('Assets/keypickup.wav')
+
     # initialization of display surface and font
     DISPLAYSURFACE = pygame.display.set_mode((DISPLAY_HEIGHT, DISPLAY_HEIGHT))
     pygame.display.set_caption('Dungeon Crawler')
@@ -188,7 +190,7 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
-                keysound.play()
+                #KEYSOUND.play()
 
                 if key == bkey:
                     skey.visible = True
