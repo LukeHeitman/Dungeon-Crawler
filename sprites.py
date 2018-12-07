@@ -47,7 +47,7 @@ class Monster(pygame.sprite.Sprite):
         self.rect = self.image['IdleR'][0].get_rect()
         self.rect.topleft = (self.x, self.y)
         self.width , self.height = self.rect.size
-    
+
     def move_towards_player(self, player):
         # find normalized direction vector (dx, dy) between enemy and player
         if self.visible == True:
