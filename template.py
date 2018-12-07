@@ -289,7 +289,7 @@ def end_screen():
 
 def game_win():
 
-    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+    DISPLAYSURFACE.fill(BLACK) 
 
     # Set up game over
     title_font = pygame.font.Font(DEFAULTFONT, 60)
