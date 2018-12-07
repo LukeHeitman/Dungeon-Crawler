@@ -32,8 +32,10 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 DEFAULTFONT = 'Assets/dungeon.ttf' # default font directory
 
+
+
 def main():
-    global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, IMAGEDICT, LEVEL, LIVES, KEYS
+    global FPSCLOCK, DISPLAYSURFACE, FONTSIZE, BASICFONT, LEVEL, LIVES, KEYS
 
     pygame.init() # Pygame initialization
     FPSCLOCK = pygame.time.Clock()
@@ -47,17 +49,16 @@ def main():
     FONTSIZE = 35
     BASICFONT = pygame.font.Font(DEFAULTFONT, FONTSIZE)
 
-    KEYS = 3
-    LEVEL = 1
-    LIVES = 3
-
     intro_screen() # Begin game with intro screen
-    game_loop()
+    
+    level = 1
+    lives = 3
+    game_loop(level, lives)
 
     game_quit()
 
 def intro_screen():
-    DISPLAYSURFACE.fill(BLACK) # Display background image TODO
+    DISPLAYSURFACE.fill(BLACK)
 
     # Set up title
     title_font = pygame.font.Font(DEFAULTFONT, 60)
@@ -89,7 +90,7 @@ def intro_screen():
         pygame.display.update()
         FPSCLOCK.tick(FPS)
 
-def game_loop():
+def game_loop(level, lives):
     player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
     
     demon = Monster(DEMONDICT, rand_xtile(), rand_ytile())
@@ -103,7 +104,7 @@ def game_loop():
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
     
-    if LEVEL > 1:
+    if level > 1:
         for skeleton in skeletons:
             skeleton.visible == True
 
@@ -114,8 +115,8 @@ def game_loop():
     gkey = Key(KEYDICT['goldkey'], rand_xtile(), rand_ytile())
     game_keys = [bkey, skey, gkey]
     
-    KEYS = 3
-    
+    keys = 3
+
     while True: # main game loop
         for event in pygame.event.get(): # exits game if user clicks X
             if event.type == QUIT:
@@ -133,7 +134,7 @@ def game_loop():
                     DISPLAYSURFACE.blit(LEVELDICT['wall_top'], block_rect)
                 if y == 3:
                     door_open_rect = pygame.Rect((DISPLAY_WIDTH/2-1 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))        
-                    if KEYS == 0:
+                    if keys == 0:
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][0], door_open_rect)
                         door_rect = pygame.Rect((DISPLAY_WIDTH/2-2 * BLOCK, (y - 1) * BLOCK, TILE, TILE ))
                         DISPLAYSURFACE.blit(LEVELDICT['door_open'][1], door_rect)
@@ -179,20 +180,20 @@ def game_loop():
 
         for key in game_keys: # collision testing for keys
             if player.hitbox.colliderect(key.rect) and key.visible == True:
-                if LEVEL == 3:
-                    ogres[KEYS - 1].visible = True
+                if level == 3:
+                    ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
                 if key == bkey:
                     skey.visible = True
-                    KEYS -= 1
+                    keys -= 1
                     demon.vel += 1
                 elif key == skey:
                     gkey.visible = True
-                    KEYS -= 1
+                    keys -= 1
                     demon.vel += 1
                 elif key == gkey:
-                    KEYS -= 1                    
+                    keys -= 1                    
                     demon.vel += 1 # ghost speeds up every 3 keys
         
         for monster in monsters:
@@ -202,17 +203,17 @@ def game_loop():
             if monster.visible == True and monster.hitbox.colliderect(player.hitbox): # collision testing for ghost
                 lives = lives - 1 # player loses a life
                 if lives > 0:                    
-                    game_loop()
+                    game_loop(level, lives)
                 else:
                     end_screen() # if ghost touches player - game over
         
-        if KEYS == 0 and player.hitbox.colliderect(door_open_rect):
-            LEVEL += 1
-            if LEVEL > 3:
+        if keys == 0 and player.hitbox.colliderect(door_open_rect):
+            level += 1
+            if level > 3:
                 pygame.mixer.music.stop() # Stop music if the player exits through the door
                 game_win()
             else:
-                game_loop()
+                game_loop(level, lives)
              
         player.draw(DISPLAYSURFACE)
 
@@ -225,13 +226,13 @@ def game_loop():
 
 
         # test code for displaying score
-        score_text = BASICFONT.render('Level:  ' + str(LEVEL), True, WHITE)
+        score_text = BASICFONT.render('Level:  ' + str(level), True, WHITE)
         score_rect = score_text.get_rect()
         score_rect.topleft = (10, 10)
         DISPLAYSURFACE.blit(score_text, score_rect) # Display title text
     
         # code for displaying lives
-        life_text = BASICFONT.render('Lives:  ' + str(LIVES), True, WHITE)
+        life_text = BASICFONT.render('Lives:  ' + str(lives), True, WHITE)
         life_rect = life_text.get_rect()
         life_rect.topright = (DISPLAY_WIDTH-10, 10)
         DISPLAYSURFACE.blit(life_text, life_rect) # Display title text
