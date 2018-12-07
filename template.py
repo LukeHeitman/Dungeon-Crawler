@@ -97,7 +97,7 @@ def game_loop(level, lives):
     player = Sprite(PLAYERDICT, DISPLAY_WIDTH/2, DISPLAY_HEIGHT/2) # initialize all movable sprites into the map
     
     demon = Monster(DEMONDICT, rand_xtile(), rand_ytile())
-    demon.visible = True\
+    demon.visible = True
     ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
     ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
     ogre3 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
