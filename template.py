@@ -100,19 +100,18 @@ def game_loop(level, lives):
     
     demon = Monster(DEMONDICT, rand_xtile(), rand_ytile())
     demon.visible = True
-    ogre1 = Monster(OGREDICT, rand_xtile(), rand_ytile())
-    ogre2 = Monster(OGREDICT, rand_xtile(), rand_ytile())
-    ogre3 = Monster(OGREDICT, rand_xtile(), rand_ytile())
+    ogre1 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
+    ogre2 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
+    ogre3 = Monster(OGREDICT, DISPLAY_WIDTH/2-1 * BLOCK, 30)
     skeleton1 = Monster(SKELETONDICT, rand_xtile(), rand_ytile())
     skeleton2 = Monster(SKELETONDICT, rand_xtile(), rand_ytile())
     monsters = [demon, ogre1, ogre2, ogre3, skeleton1, skeleton2]
     ogres = [ogre1, ogre2, ogre3]
     skeletons = [skeleton1, skeleton2]
     
-   
     if level > 1:
         for skeleton in skeletons:
-            skeleton.visible = True
+            skeleton.visible == True
 
     # initialize keys randomly around the map
     bkey = Key(KEYDICT['bronzekey'], rand_xtile(), rand_ytile())
@@ -190,7 +189,11 @@ def game_loop(level, lives):
                     ogres[keys - 1].visible = True
                 key.visible = False
                 key.rect.center = (key.x, key.y)
+<<<<<<< HEAD
                 #KEYSOUND.play()
+=======
+                #keysound.play()
+>>>>>>> 0b85ac9ff64b41fb444de3355a7622c31fc94fb1
 
                 if key == bkey:
                     skey.visible = True
