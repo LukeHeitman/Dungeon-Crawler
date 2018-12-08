@@ -68,7 +68,7 @@ def intro_screen():
     DISPLAYSURFACE.blit(title_text, title_rect) # Display title text
 
     # Full list of all instructions and game open, line by line
-    instructions = ['Collect keys to escape...', 'Stay away from the monsters!', 'PRESS SPACEBAR TO PLAY', 'USE ARROW KEYS TO MOVE']
+    instructions = ['Collect keys to escape...', 'Stay away from the monsters!','', 'PRESS SPACEBAR TO PLAY', 'USE ARROW KEYS TO MOVE']
 
     instruct_start = HALF_DH * 7/8 # where the first line of instructions begins
     for line in instructions: # iterate through all lines in instructions
@@ -92,7 +92,6 @@ def intro_screen():
 
 
 def game_loop(level, lives): # main game loop with current level and lives
-    
     player = Player(PLAYERDICT, HALF_DW, HALF_DH) # initialize player sprite
 
     # initialize all monster sprites
@@ -165,7 +164,7 @@ def game_loop(level, lives): # main game loop with current level and lives
                      DISPLAYSURFACE.blit(LEVELDICT['wall'], block_rect)
 
         player.right = False # reset player movement
-        player.left = False        
+        player.left = False
         
         inputs = pygame.key.get_pressed() # handles key pressed events and moves player
         if inputs[pygame.K_RIGHT] and player.x < DISPLAY_WIDTH - player.width:
